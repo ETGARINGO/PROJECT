@@ -6,9 +6,9 @@
     <title>Project Showcase | Professional View</title>
     <style>
         :root {
-            --primary-color: #4CAF50;
-            --bg-dark: #121212;
-            --text-light: #ffffff;
+            --cyber-blue: #00f2ff;
+            --cyber-pink: #ff00ff;
+            --bg-black: #050505;
         }
 
         body, html {
@@ -17,61 +17,94 @@
             height: 100vh;
             width: 100vw;
             overflow: hidden;
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Courier New', Courier, monospace;
+            background: var(--bg-black);
         }
 
-        /* --- ENTRANCE ANIMATION STYLES --- */
-        #splash-screen {
+        /* --- CYBER ENTRANCE OVERLAY --- */
+        #cyber-entrance {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--bg-dark);
+            background: var(--bg-black);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
-            transition: opacity 0.8s ease-out, visibility 0.8s;
+            z-index: 1000;
+            transition: transform 0.8s cubic-bezier(0.87, 0, 0.13, 1), opacity 0.5s;
         }
 
-        .loader-logo {
-            font-size: 2rem;
-            color: white;
-            font-weight: bold;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-            animation: fadeInOut 2s infinite ease-in-out;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(255,255,255,0.1);
-            border-top: 3px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes fadeInOut { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
-
-        .fade-out {
+        /* Lightning Reel Effect */
+        .lightning-bolt {
+            position: absolute;
+            width: 2px;
+            background: white;
+            box-shadow: 0 0 20px 5px var(--cyber-blue);
             opacity: 0;
-            visibility: hidden;
+            pointer-events: none;
         }
 
-        /* --- MAIN UI STYLES --- */
+        .cyber-text {
+            color: var(--cyber-blue);
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 10px;
+            text-shadow: 0 0 10px var(--cyber-blue), 0 0 20px var(--cyber-blue);
+            animation: glitch 1s infinite, flicker 0.1s infinite alternate;
+            z-index: 1001;
+        }
+
+        .scanning-line {
+            width: 100%;
+            height: 4px;
+            background: var(--cyber-blue);
+            position: absolute;
+            top: 0;
+            box-shadow: 0 0 15px var(--cyber-blue);
+            animation: scan 2s linear infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-5px, 5px); color: var(--cyber-pink); }
+            40% { transform: translate(-5px, -5px); }
+            60% { transform: translate(5px, 5px); color: var(--cyber-blue); }
+            80% { transform: translate(5px, -5px); }
+            100% { transform: translate(0); }
+        }
+
+        /* Exit Animation Classes */
+        .portal-exit {
+            transform: scale(1.5);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* --- CONTENT UI --- */
         .nav-bar {
             height: 60px;
-            background: #1a1a1a;
-            color: white;
+            background: #111;
+            color: var(--cyber-blue);
             display: flex;
             align-items: center;
             padding: 0 20px;
             justify-content: space-between;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            border-bottom: 2px solid var(--cyber-blue);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
             position: relative;
             z-index: 100;
         }
@@ -89,37 +122,39 @@
         }
 
         .btn-home {
-            background: var(--primary-color);
-            color: white;
+            background: transparent;
+            color: var(--cyber-blue);
+            border: 1px solid var(--cyber-blue);
             padding: 8px 20px;
             text-decoration: none;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: bold;
-            transition: transform 0.2s;
+            font-size: 12px;
+            text-transform: uppercase;
+            transition: 0.3s;
+            box-shadow: 0 0 5px var(--cyber-blue);
         }
 
-        .btn-home:hover { transform: scale(1.05); }
-
+        .btn-home:hover {
+            background: var(--cyber-blue);
+            color: black;
+            box-shadow: 0 0 20px var(--cyber-blue);
+        }
     </style>
 </head>
 <body>
 
-    <div id="splash-screen">
-        <div class="loader-logo">INITIALIZING PROJECT...</div>
-        <div class="spinner"></div>
-    </div>
+    <div id="cyber-entrance">
+        <div class="scanning-line"></div>
+        <div class="cyber-text">System Booting...</div>
+        </div>
 
     <header class="nav-bar">
         <div>
-            <span style="color: #888;">PORTAL /</span> 
-            <strong>YOUR PROJECT NAME</strong>
+            <strong>ACCESS GRANTED //</strong> PROJECT_PORTAL_V2.0
         </div>
-        <a href="index.html" class="btn-home">REFRESH</a>
+        <a href="index.html" class="btn-home">Reload System</a>
     </header>
 
     <iframe 
-        id="project-iframe"
         src="https://script.google.com/macros/s/AKfycbyMBlbc9cG_WZhbpAXTvBvyahs76E9l42mXN3yxXGnGfZAefX-kUZJz6F8O15B-uza4/exec" 
         class="content-frame"
         allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
@@ -127,14 +162,36 @@
     </iframe>
 
     <script>
-        // Wait for the iframe to load or a fixed timeout
-        window.addEventListener('load', function() {
-            const splash = document.getElementById('splash-screen');
+        // Function to create lightning reel effect
+        function createLightning() {
+            const entrance = document.getElementById('cyber-entrance');
+            const bolt = document.createElement('div');
+            bolt.classList.add('lightning-bolt');
             
-            // We give it a small extra delay so the animation looks intentional
+            const left = Math.random() * 100;
+            const height = Math.random() * 100 + 50;
+            
+            bolt.style.left = left + '%';
+            bolt.style.height = height + 'vh';
+            bolt.style.top = (Math.random() * 50) + '%';
+            
+            entrance.appendChild(bolt);
+            
+            // Animation flash
+            setTimeout(() => { bolt.style.opacity = '1'; }, 10);
+            setTimeout(() => { bolt.style.opacity = '0'; }, 100);
+            setTimeout(() => { bolt.remove(); }, 200);
+        }
+
+        // Start lightning reels
+        const lightningInterval = setInterval(createLightning, 150);
+
+        // Handle Entrance Exit
+        window.addEventListener('load', function() {
             setTimeout(() => {
-                splash.classList.add('fade-out');
-            }, 2500); // 2.5 seconds of intro
+                clearInterval(lightningInterval);
+                document.getElementById('cyber-entrance').classList.add('portal-exit');
+            }, 3000); // Intro lasts 3 seconds
         });
     </script>
 
