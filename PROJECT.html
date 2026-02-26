@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Showcase | Professional View</title>
+    <title>PROJECT | WEB247 Solutions</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="5FC6C77A-BAD0-4FFA-B908-DBEA57CFCB03.png">
+    <link rel="apple-touch-icon" href="5FC6C77A-BAD0-4FFA-B908-DBEA57CFCB03.png">
+
     <style>
         :root {
             --cyber-blue: #00f2ff;
@@ -11,114 +16,101 @@
             --bg-black: #050505;
         }
 
-        body, html {
+        * {
             margin: 0;
             padding: 0;
-            height: 100vh;
-            width: 100vw;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
             overflow: hidden;
             font-family: 'Courier New', Courier, monospace;
             background: var(--bg-black);
         }
 
-        /* --- CYBER ENTRANCE OVERLAY --- */
+        /* ================= CYBER ENTRANCE ================= */
+
         #cyber-entrance {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             background: var(--bg-black);
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            transition: transform 0.8s cubic-bezier(0.87, 0, 0.13, 1), opacity 0.5s;
-        }
-
-        /* Lightning Reel Effect */
-        .lightning-bolt {
-            position: absolute;
-            width: 2px;
-            background: white;
-            box-shadow: 0 0 20px 5px var(--cyber-blue);
-            opacity: 0;
-            pointer-events: none;
+            flex-direction: column;
+            z-index: 9999;
+            transition: transform 0.8s cubic-bezier(0.87, 0, 0.13, 1), opacity 0.5s ease;
         }
 
         .cyber-text {
             color: var(--cyber-blue);
             font-size: 2.5rem;
+            letter-spacing: 8px;
             text-transform: uppercase;
-            letter-spacing: 10px;
             text-shadow: 0 0 10px var(--cyber-blue), 0 0 20px var(--cyber-blue);
-            animation: glitch 1s infinite, flicker 0.1s infinite alternate;
-            z-index: 1001;
+            animation: glitch 1s infinite, flicker 0.15s infinite alternate;
         }
 
         .scanning-line {
-            width: 100%;
-            height: 4px;
-            background: var(--cyber-blue);
             position: absolute;
-            top: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--cyber-blue);
             box-shadow: 0 0 15px var(--cyber-blue);
             animation: scan 2s linear infinite;
-            opacity: 0.5;
+            opacity: 0.4;
         }
 
-        @keyframes scan {
-            0% { top: 0%; }
-            100% { top: 100%; }
-        }
-
-        @keyframes flicker {
-            0% { opacity: 0.8; }
-            100% { opacity: 1; }
-        }
-
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-5px, 5px); color: var(--cyber-pink); }
-            40% { transform: translate(-5px, -5px); }
-            60% { transform: translate(5px, 5px); color: var(--cyber-blue); }
-            80% { transform: translate(5px, -5px); }
-            100% { transform: translate(0); }
-        }
-
-        /* Exit Animation Classes */
-        .portal-exit {
-            transform: scale(1.5);
+        .lightning-bolt {
+            position: absolute;
+            width: 2px;
+            background: #fff;
+            box-shadow: 0 0 20px 5px var(--cyber-blue);
             opacity: 0;
             pointer-events: none;
         }
 
-        /* --- CONTENT UI --- */
+        @keyframes scan {
+            from { top: 0%; }
+            to { top: 100%; }
+        }
+
+        @keyframes flicker {
+            from { opacity: 0.8; }
+            to { opacity: 1; }
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-4px, 4px); color: var(--cyber-pink); }
+            40% { transform: translate(-4px, -4px); }
+            60% { transform: translate(4px, 4px); }
+            80% { transform: translate(4px, -4px); }
+            100% { transform: translate(0); color: var(--cyber-blue); }
+        }
+
+        .portal-exit {
+            transform: scale(1.3);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* ================= NAV BAR ================= */
+
         .nav-bar {
             height: 60px;
             background: #111;
             color: var(--cyber-blue);
             display: flex;
             align-items: center;
-            padding: 0 20px;
             justify-content: space-between;
+            padding: 0 20px;
             border-bottom: 2px solid var(--cyber-blue);
             box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
             position: relative;
             z-index: 100;
-        }
-
-        .content-frame {
-            position: absolute;
-            top: 60px;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            width: 100%;
-            height: calc(100vh - 60px);
-            border: none;
-            background: white;
         }
 
         .btn-home {
@@ -126,72 +118,80 @@
             color: var(--cyber-blue);
             border: 1px solid var(--cyber-blue);
             padding: 8px 20px;
-            text-decoration: none;
             font-size: 12px;
             text-transform: uppercase;
-            transition: 0.3s;
+            text-decoration: none;
+            transition: 0.3s ease;
             box-shadow: 0 0 5px var(--cyber-blue);
         }
 
         .btn-home:hover {
             background: var(--cyber-blue);
-            color: black;
+            color: #000;
             box-shadow: 0 0 20px var(--cyber-blue);
+        }
+
+        /* ================= IFRAME ================= */
+
+        .content-frame {
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 60px);
+            border: none;
+            background: #fff;
         }
     </style>
 </head>
+
 <body>
 
+    <!-- Cyber Entrance -->
     <div id="cyber-entrance">
         <div class="scanning-line"></div>
         <div class="cyber-text">System Booting...</div>
-        </div>
+    </div>
 
+    <!-- Navigation -->
     <header class="nav-bar">
-        <div>
-            <strong>ACCESS GRANTED //</strong> PROJECT_PORTAL_V2.0
-        </div>
+        <div><strong>ACCESS GRANTED //</strong> PROJECT_PORTAL_V2.0</div>
         <a href="https://project.web247.online/PROJECT" class="btn-home">Reload System</a>
     </header>
 
+    <!-- Main Content -->
     <iframe 
-        src="https://script.google.com/macros/s/AKfycbwH5c40V3uKYBqNFHjGRyC5LvTGlOkF18qJaUD8b9AjVsAmls_Fek4b4bhK9NWHcaWE/exec" 
+        src="https://script.google.com/macros/s/AKfycbwH5c40V3uKYBqNFHjGRyC5LvTGlOkF18qJaUD8b9AjVsAmls_Fek4b4bhK9NWHcaWE/exec"
         class="content-frame"
-        allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+        allow="geolocation; microphone; camera; payment"
         sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals">
     </iframe>
 
     <script>
-        // Function to create lightning reel effect
+        const entrance = document.getElementById('cyber-entrance');
+
         function createLightning() {
-            const entrance = document.getElementById('cyber-entrance');
             const bolt = document.createElement('div');
-            bolt.classList.add('lightning-bolt');
-            
-            const left = Math.random() * 100;
-            const height = Math.random() * 100 + 50;
-            
-            bolt.style.left = left + '%';
-            bolt.style.height = height + 'vh';
-            bolt.style.top = (Math.random() * 50) + '%';
-            
+            bolt.className = 'lightning-bolt';
+
+            bolt.style.left = Math.random() * 100 + '%';
+            bolt.style.height = (Math.random() * 60 + 40) + 'vh';
+            bolt.style.top = Math.random() * 50 + '%';
+
             entrance.appendChild(bolt);
-            
-            // Animation flash
-            setTimeout(() => { bolt.style.opacity = '1'; }, 10);
-            setTimeout(() => { bolt.style.opacity = '0'; }, 100);
-            setTimeout(() => { bolt.remove(); }, 200);
+
+            setTimeout(() => bolt.style.opacity = '1', 10);
+            setTimeout(() => bolt.style.opacity = '0', 100);
+            setTimeout(() => bolt.remove(), 200);
         }
 
-        // Start lightning reels
         const lightningInterval = setInterval(createLightning, 150);
 
-        // Handle Entrance Exit
-        window.addEventListener('load', function() {
+        window.addEventListener('load', () => {
             setTimeout(() => {
                 clearInterval(lightningInterval);
-                document.getElementById('cyber-entrance').classList.add('portal-exit');
-            }, 3000); // Intro lasts 3 seconds
+                entrance.classList.add('portal-exit');
+            }, 3000);
         });
     </script>
 
