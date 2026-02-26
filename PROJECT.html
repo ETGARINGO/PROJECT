@@ -1,186 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Executive Portfolio | Secure Access</title>
-    <style>
-        :root {
-            --cyber-blue: #00f2ff;
-            --cyber-pink: #ff00ff;
-            --bg-black: #050505;
-            --card-glass: rgba(0, 242, 255, 0.05);
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Showcase | Professional View</title>
+    <style>
+        :root {
+            --cyber-blue: #00f2ff;
+            --cyber-pink: #ff00ff;
+            --bg-black: #050505;
+        }
 
-        body, html {
-            margin: 0; padding: 0;
-            height: 100vh; width: 100vw;
-            overflow: hidden;
-            font-family: 'Courier New', Courier, monospace;
-            background: var(--bg-black);
-            color: white;
-        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            font-family: 'Courier New', Courier, monospace;
+            background: var(--bg-black);
+        }
 
-        /* --- PERSISTENT DNS WRAPPER --- */
-        #main-view-container {
-            position: absolute;
-            top: 60px; bottom: 0; left: 0; right: 0;
-            background: #000;
-        }
+        /* --- CYBER ENTRANCE OVERLAY --- */
+        #cyber-entrance {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-black);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: transform 0.8s cubic-bezier(0.87, 0, 0.13, 1), opacity 0.5s;
+        }
 
-        iframe {
-            width: 100%; height: 100%;
-            border: none;
-            background: #fff;
-        }
+        /* Lightning Reel Effect */
+        .lightning-bolt {
+            position: absolute;
+            width: 2px;
+            background: white;
+            box-shadow: 0 0 20px 5px var(--cyber-blue);
+            opacity: 0;
+            pointer-events: none;
+        }
 
-        /* --- CYBER ENTRANCE & POPUP CARDS --- */
-        #cyber-entrance {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: var(--bg-black);
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            z-index: 2000;
-            transition: transform 1s cubic-bezier(0.87, 0, 0.13, 1);
-        }
+        .cyber-text {
+            color: var(--cyber-blue);
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 10px;
+            text-shadow: 0 0 10px var(--cyber-blue), 0 0 20px var(--cyber-blue);
+            animation: glitch 1s infinite, flicker 0.1s infinite alternate;
+            z-index: 1001;
+        }
 
-        .lightning-bolt {
-            position: absolute;
-            width: 2px; background: white;
-            box-shadow: 0 0 20px 5px var(--cyber-blue);
-            opacity: 0; pointer-events: none;
-        }
+        .scanning-line {
+            width: 100%;
+            height: 4px;
+            background: var(--cyber-blue);
+            position: absolute;
+            top: 0;
+            box-shadow: 0 0 15px var(--cyber-blue);
+            animation: scan 2s linear infinite;
+            opacity: 0.5;
+        }
 
-        .cyber-header {
-            color: var(--cyber-blue);
-            font-size: 1.8rem;
-            letter-spacing: 8px;
-            margin-bottom: 40px;
-            text-shadow: 0 0 10px var(--cyber-blue);
-            animation: flicker 0.2s infinite alternate;
-        }
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
 
-        /* PROJECT CARDS GRID */
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            max-width: 900px;
-            perspective: 1000px;
-        }
+        @keyframes flicker {
+            0% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
 
-        .project-card {
-            background: var(--card-glass);
-            border: 1px solid var(--cyber-blue);
-            padding: 25px;
-            cursor: pointer;
-            transition: 0.4s;
-            position: relative;
-            overflow: hidden;
-            animation: cardPopup 0.6s backwards;
-        }
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-5px, 5px); color: var(--cyber-pink); }
+            40% { transform: translate(-5px, -5px); }
+            60% { transform: translate(5px, 5px); color: var(--cyber-blue); }
+            80% { transform: translate(5px, -5px); }
+            100% { transform: translate(0); }
+        }
 
-        .project-card:hover {
-            background: rgba(0, 242, 255, 0.2);
-            box-shadow: 0 0 30px var(--cyber-blue);
-            transform: translateZ(20px);
-        }
+        /* Exit Animation Classes */
+        .portal-exit {
+            transform: scale(1.5);
+            opacity: 0;
+            pointer-events: none;
+        }
 
-        .project-card h3 { color: var(--cyber-pink); margin: 0 0 10px 0; font-size: 1rem; }
-        .project-card p { font-size: 0.8rem; color: #aaa; margin: 0; line-height: 1.4; }
+        /* --- CONTENT UI --- */
+        .nav-bar {
+            height: 60px;
+            background: #111;
+            color: var(--cyber-blue);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--cyber-blue);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+            position: relative;
+            z-index: 100;
+        }
 
-        /* EXIT ANIMATION */
-        .portal-vanish { transform: translateY(-100%); opacity: 0; }
+        .content-frame {
+            position: absolute;
+            top: 60px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: calc(100vh - 60px);
+            border: none;
+            background: white;
+        }
 
-        @keyframes cardPopup {
-            from { transform: scale(0.8) translateY(50px); opacity: 0; }
-            to { transform: scale(1) translateY(0); opacity: 1; }
-        }
+        .btn-home {
+            background: transparent;
+            color: var(--cyber-blue);
+            border: 1px solid var(--cyber-blue);
+            padding: 8px 20px;
+            text-decoration: none;
+            font-size: 12px;
+            text-transform: uppercase;
+            transition: 0.3s;
+            box-shadow: 0 0 5px var(--cyber-blue);
+        }
 
-        @keyframes flicker {
-            0% { opacity: 0.9; } 100% { opacity: 1; }
-        }
-
-        /* --- TOP NAV BAR (STAYS ON DNS) --- */
-        .nav-bar {
-            height: 60px;
-            background: #111;
-            color: var(--cyber-blue);
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            justify-content: space-between;
-            border-bottom: 2px solid var(--cyber-blue);
-            position: relative;
-            z-index: 100;
-        }
-    </style>
+        .btn-home:hover {
+            background: var(--cyber-blue);
+            color: black;
+            box-shadow: 0 0 20px var(--cyber-blue);
+        }
+    </style>
 </head>
 <body>
 
-    <div id="cyber-entrance">
-        <div class="cyber-header">SELECT INTERFACE</div>
-        
-        <div class="project-grid">
-            <div class="project-card" onclick="loadInternal('https://script.google.com/macros/s/AKfycbyMBlbc9cG_WZhbpAXTvBvyahs76E9l42mXN3yxXGnGfZAefX-kUZJz6F8O15B-uza4/exec', 'MAIN_TERMINAL')">
-                <h3>01 // MAIN SYSTEM</h3>
-                <p>Primary Google Apps Script application deployment. Full access.</p>
-            </div>
+    <div id="cyber-entrance">
+        <div class="scanning-line"></div>
+        <div class="cyber-text">System Booting...</div>
+        </div>
 
-            <div class="project-card" onclick="loadInternal('https://your-other-link.com', 'SECONDARY_UPLINK')">
-                <h3>02 // ANALYTICS</h3>
-                <p>Data visualization and traffic monitoring sub-module.</p>
-            </div>
-        </div>
-    </div>
+    <header class="nav-bar">
+        <div>
+            <strong>ACCESS GRANTED //</strong> PROJECT_PORTAL_V2.0
+        </div>
+        <a href="index.html" class="btn-home">Reload System</a>
+    </header>
 
-    <header class="nav-bar">
-        <div><strong>DNS_STATUS:</strong> <span id="current-project">SECURE_LINK</span></div>
-        <div style="font-size: 10px;">ENCRYPTED SESSION // PROJECT_PORTAL_V4</div>
-    </header>
+    <iframe 
+        src="https://script.google.com/macros/s/AKfycbyMBlbc9cG_WZhbpAXTvBvyahs76E9l42mXN3yxXGnGfZAefX-kUZJz6F8O15B-uza4/exec" 
+        class="content-frame"
+        allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+        sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals">
+    </iframe>
 
-    <div id="main-view-container">
-        <iframe id="content-frame" src="" allow="geolocation; microphone; camera; midi; vr; encrypted-media; usb"></iframe>
-    </div>
+    <script>
+        // Function to create lightning reel effect
+        function createLightning() {
+            const entrance = document.getElementById('cyber-entrance');
+            const bolt = document.createElement('div');
+            bolt.classList.add('lightning-bolt');
+            
+            const left = Math.random() * 100;
+            const height = Math.random() * 100 + 50;
+            
+            bolt.style.left = left + '%';
+            bolt.style.height = height + 'vh';
+            bolt.style.top = (Math.random() * 50) + '%';
+            
+            entrance.appendChild(bolt);
+            
+            // Animation flash
+            setTimeout(() => { bolt.style.opacity = '1'; }, 10);
+            setTimeout(() => { bolt.style.opacity = '0'; }, 100);
+            setTimeout(() => { bolt.remove(); }, 200);
+        }
 
-    <script>
-        // Lightning Effect
-        function createLightning() {
-            const entrance = document.getElementById('cyber-entrance');
-            const bolt = document.createElement('div');
-            bolt.classList.add('lightning-bolt');
-            bolt.style.left = Math.random() * 100 + '%';
-            bolt.style.height = (Math.random() * 100 + 50) + 'vh';
-            bolt.style.top = (Math.random() * 50) + '%';
-            entrance.appendChild(bolt);
-            setTimeout(() => { bolt.style.opacity = '1'; }, 10);
-            setTimeout(() => { bolt.style.opacity = '0'; }, 100);
-            setTimeout(() => { bolt.remove(); }, 200);
-        }
-        const lInterval = setInterval(createLightning, 180);
+        // Start lightning reels
+        const lightningInterval = setInterval(createLightning, 150);
 
-        // Function to switch projects without changing DNS
-        function loadInternal(url, title) {
-            const frame = document.getElementById('content-frame');
-            const entrance = document.getElementById('cyber-entrance');
-            const titleDisplay = document.getElementById('current-project');
-
-            // 1. Set the new URL inside the frame
-            frame.src = url;
-            titleDisplay.innerText = title;
-
-            // 2. Hide the entrance
-            clearInterval(lInterval);
-            entrance.classList.add('portal-vanish');
-        }
-
-        // Card stagger animation
-        document.querySelectorAll('.project-card').forEach((card, index) => {
-            card.style.animationDelay = (index * 0.2) + 's';
-        });
-    </script>
+        // Handle Entrance Exit
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                clearInterval(lightningInterval);
+                document.getElementById('cyber-entrance').classList.add('portal-exit');
+            }, 3000); // Intro lasts 3 seconds
+        });
+    </script>
 
 </body>
 </html>
