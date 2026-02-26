@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Showcase | Professional View</title>
+    <title>Project Access | Restricted</title>
     <style>
         :root {
-            --cyber-blue: #00f2ff;
-            --cyber-pink: #ff00ff;
-            --bg-black: #050505;
+            --accent: #ff0000; /* Thriller Red */
+            --bg: #000000;
         }
 
         body, html {
@@ -17,141 +16,139 @@
             height: 100vh;
             width: 100vw;
             overflow: hidden;
-            font-family: 'Courier New', Courier, monospace;
-            background: var(--bg-black);
+            background: var(--bg);
+            font-family: 'Arial Black', Gadget, sans-serif;
         }
 
-        /* --- CYBER ENTRANCE OVERLAY --- */
-        #cyber-entrance {
+        /* --- ACTION THRILLER OVERLAY --- */
+        #thriller-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--bg-black);
+            background: var(--bg);
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            transition: transform 0.8s cubic-bezier(0.87, 0, 0.13, 1), opacity 0.5s;
+            z-index: 9999;
+            transition: all 0.6s cubic-bezier(0.95, 0.05, 0.795, 0.035);
         }
 
-        /* Lightning Reel Effect */
-        .lightning-bolt {
-            position: absolute;
-            width: 2px;
-            background: white;
-            box-shadow: 0 0 20px 5px var(--cyber-blue);
+        /* Heartbeat Pulsing Text */
+        .title-container {
+            text-align: center;
+            perspective: 1000px;
+        }
+
+        .main-title {
+            color: white;
+            font-size: 4rem;
+            letter-spacing: 15px;
+            margin: 0;
             opacity: 0;
-            pointer-events: none;
+            transform: scale(0.8) translateZ(-100px);
+            animation: impact 3s forwards ease-in-out;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
         }
 
-        .cyber-text {
-            color: var(--cyber-blue);
-            font-size: 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 10px;
-            text-shadow: 0 0 10px var(--cyber-blue), 0 0 20px var(--cyber-blue);
-            animation: glitch 1s infinite, flicker 0.1s infinite alternate;
-            z-index: 1001;
+        .subtitle {
+            color: var(--accent);
+            font-size: 1rem;
+            letter-spacing: 5px;
+            margin-top: 10px;
+            opacity: 0;
+            animation: fadeIn 1s 1.5s forwards;
         }
 
-        .scanning-line {
-            width: 100%;
-            height: 4px;
-            background: var(--cyber-blue);
-            position: absolute;
+        /* White Lightning Flash */
+        #flash {
+            position: fixed;
             top: 0;
-            box-shadow: 0 0 15px var(--cyber-blue);
-            animation: scan 2s linear infinite;
-            opacity: 0.5;
-        }
-
-        @keyframes scan {
-            0% { top: 0%; }
-            100% { top: 100%; }
-        }
-
-        @keyframes flicker {
-            0% { opacity: 0.8; }
-            100% { opacity: 1; }
-        }
-
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-5px, 5px); color: var(--cyber-pink); }
-            40% { transform: translate(-5px, -5px); }
-            60% { transform: translate(5px, 5px); color: var(--cyber-blue); }
-            80% { transform: translate(5px, -5px); }
-            100% { transform: translate(0); }
-        }
-
-        /* Exit Animation Classes */
-        .portal-exit {
-            transform: scale(1.5);
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
             opacity: 0;
+            z-index: 10000;
             pointer-events: none;
         }
 
-        /* --- CONTENT UI --- */
+        /* Keyframes */
+        @keyframes impact {
+            0% { opacity: 0; transform: scale(0.5) translateZ(-200px); filter: blur(20px); }
+            50% { opacity: 1; transform: scale(1.1) translateZ(50px); filter: blur(0px); }
+            80% { opacity: 1; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.05); }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes flash-bang {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Exit Sequence */
+        .reveal-site {
+            transform: scale(5);
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* --- PROJECT VIEW --- */
         .nav-bar {
-            height: 60px;
+            height: 50px;
             background: #111;
-            color: var(--cyber-blue);
+            color: #555;
             display: flex;
             align-items: center;
             padding: 0 20px;
             justify-content: space-between;
-            border-bottom: 2px solid var(--cyber-blue);
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
-            position: relative;
-            z-index: 100;
+            border-bottom: 1px solid #333;
         }
 
         .content-frame {
             position: absolute;
-            top: 60px;
+            top: 50px;
             bottom: 0;
             left: 0;
             right: 0;
             width: 100%;
-            height: calc(100vh - 60px);
+            height: calc(100vh - 50px);
             border: none;
-            background: white;
+            background: #fff;
         }
 
-        .btn-home {
-            background: transparent;
-            color: var(--cyber-blue);
-            border: 1px solid var(--cyber-blue);
-            padding: 8px 20px;
+        .btn-refresh {
+            color: #888;
             text-decoration: none;
-            font-size: 12px;
-            text-transform: uppercase;
+            font-size: 11px;
+            border: 1px solid #444;
+            padding: 5px 12px;
             transition: 0.3s;
-            box-shadow: 0 0 5px var(--cyber-blue);
         }
 
-        .btn-home:hover {
-            background: var(--cyber-blue);
-            color: black;
-            box-shadow: 0 0 20px var(--cyber-blue);
-        }
+        .btn-refresh:hover { color: white; border-color: white; }
     </style>
 </head>
 <body>
 
-    <div id="cyber-entrance">
-        <div class="scanning-line"></div>
-        <div class="cyber-text">System Booting...</div>
+    <div id="flash"></div>
+
+    <div id="thriller-overlay">
+        <div class="title-container">
+            <h1 class="main-title">INITIATING</h1>
+            <div class="subtitle">PREPARE FOR DEPLOYMENT</div>
         </div>
+    </div>
 
     <header class="nav-bar">
-        <div>
-            <strong>ACCESS GRANTED //</strong> PROJECT_PORTAL_V2.0
-        </div>
-        <a href="index.html" class="btn-home">Reload System</a>
+        <div><strong>SECURE_LINK //</strong> PROJECT_ALPHA</div>
+        <a href="index.html" class="btn-refresh">RE-SYNC</a>
     </header>
 
     <iframe 
@@ -162,36 +159,21 @@
     </iframe>
 
     <script>
-        // Function to create lightning reel effect
-        function createLightning() {
-            const entrance = document.getElementById('cyber-entrance');
-            const bolt = document.createElement('div');
-            bolt.classList.add('lightning-bolt');
-            
-            const left = Math.random() * 100;
-            const height = Math.random() * 100 + 50;
-            
-            bolt.style.left = left + '%';
-            bolt.style.height = height + 'vh';
-            bolt.style.top = (Math.random() * 50) + '%';
-            
-            entrance.appendChild(bolt);
-            
-            // Animation flash
-            setTimeout(() => { bolt.style.opacity = '1'; }, 10);
-            setTimeout(() => { bolt.style.opacity = '0'; }, 100);
-            setTimeout(() => { bolt.remove(); }, 200);
-        }
-
-        // Start lightning reels
-        const lightningInterval = setInterval(createLightning, 150);
-
-        // Handle Entrance Exit
         window.addEventListener('load', function() {
+            const overlay = document.getElementById('thriller-overlay');
+            const flash = document.getElementById('flash');
+
+            // 1. Wait for dramatic effect
             setTimeout(() => {
-                clearInterval(lightningInterval);
-                document.getElementById('cyber-entrance').classList.add('portal-exit');
-            }, 3000); // Intro lasts 3 seconds
+                // 2. Trigger Lightning Flash
+                flash.style.animation = "flash-bang 0.4s ease-out forwards";
+                
+                // 3. Zoom out and reveal
+                setTimeout(() => {
+                    overlay.classList.add('reveal-site');
+                }, 100);
+
+            }, 3500); // Sequence starts at 3.5 seconds
         });
     </script>
 
