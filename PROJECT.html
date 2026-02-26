@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Showcase | Professional View</title>
+    <title>Project Portal | Cyber Overview</title>
     <style>
         :root {
             --cyber-blue: #00f2ff;
             --cyber-pink: #ff00ff;
             --bg-black: #050505;
+            --card-bg: rgba(0, 242, 255, 0.05);
         }
 
         body, html {
@@ -19,9 +20,10 @@
             overflow: hidden;
             font-family: 'Courier New', Courier, monospace;
             background: var(--bg-black);
+            color: white;
         }
 
-        /* --- CYBER ENTRANCE OVERLAY --- */
+        /* --- CYBER OVERLAY --- */
         #cyber-entrance {
             position: fixed;
             top: 0;
@@ -34,10 +36,9 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            transition: all 0.8s cubic-bezier(0.87, 0, 0.13, 1);
+            transition: all 1s cubic-bezier(0.87, 0, 0.13, 1);
         }
 
-        /* Lightning Reel Effect */
         .lightning-bolt {
             position: absolute;
             width: 2px;
@@ -47,75 +48,80 @@
             pointer-events: none;
         }
 
-        .cyber-text {
-            color: var(--cyber-blue);
-            font-size: 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 10px;
-            text-shadow: 0 0 10px var(--cyber-blue);
-            animation: flicker 0.1s infinite alternate;
-            z-index: 1001;
-            margin-bottom: 30px;
+        /* --- OVERVIEW GRID --- */
+        #overview-container {
+            display: none; /* Shown after boot text */
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 800px;
+            width: 90%;
+            margin-top: 20px;
+            animation: fadeIn 1s forwards;
         }
 
-        /* --- THE CYBER BUTTON POPUP --- */
-        #enter-btn {
-            display: none; /* Hidden until system boots */
-            background: transparent;
-            color: var(--cyber-pink);
-            border: 2px solid var(--cyber-pink);
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            letter-spacing: 5px;
+        .dummy-card {
+            background: var(--card-bg);
+            border: 1px solid var(--cyber-blue);
+            padding: 20px;
+            text-align: left;
             position: relative;
-            overflow: hidden;
             transition: 0.3s;
-            box-shadow: 0 0 15px var(--cyber-pink);
-            animation: popup 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 1002;
+            cursor: default;
+            overflow: hidden;
         }
 
-        #enter-btn:hover {
-            background: var(--cyber-pink);
-            color: white;
-            box-shadow: 0 0 40px var(--cyber-pink);
-            transform: scale(1.1);
-        }
-
-        @keyframes popup {
-            0% { transform: scale(0); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .scanning-line {
-            width: 100%;
-            height: 4px;
-            background: var(--cyber-blue);
-            position: absolute;
-            top: 0;
+        .dummy-card:hover {
+            background: rgba(0, 242, 255, 0.15);
             box-shadow: 0 0 15px var(--cyber-blue);
-            animation: scan 2s linear infinite;
-            opacity: 0.3;
         }
 
-        @keyframes scan {
-            0% { top: 0%; }
-            100% { top: 100%; }
+        .dummy-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 0.9rem;
+            color: var(--cyber-pink);
+            text-transform: uppercase;
         }
 
-        @keyframes flicker {
-            0% { opacity: 0.7; }
-            100% { opacity: 1; }
+        .dummy-card p {
+            margin: 0;
+            font-size: 0.75rem;
+            color: #ccc;
+            line-height: 1.4;
         }
 
-        /* Exit Animation */
-        .portal-exit {
-            transform: translateY(-100%);
-            opacity: 0;
+        /* --- PRIMARY ENTER BUTTON --- */
+        #main-enter-btn {
+            display: none;
+            margin-top: 40px;
+            background: transparent;
+            color: var(--cyber-blue);
+            border: 2px solid var(--cyber-blue);
+            padding: 15px 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            box-shadow: 0 0 10px var(--cyber-blue);
+            transition: 0.4s;
+            animation: pulse 2s infinite;
         }
+
+        #main-enter-btn:hover {
+            background: var(--cyber-blue);
+            color: black;
+            box-shadow: 0 0 30px var(--cyber-blue);
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 5px var(--cyber-blue); }
+            50% { box-shadow: 0 0 25px var(--cyber-blue); }
+            100% { box-shadow: 0 0 5px var(--cyber-blue); }
+        }
+
+        .portal-exit { transform: scale(2); opacity: 0; pointer-events: none; }
 
         /* --- CONTENT UI --- */
         .nav-bar {
@@ -127,7 +133,6 @@
             padding: 0 20px;
             justify-content: space-between;
             border-bottom: 2px solid var(--cyber-blue);
-            z-index: 100;
         }
 
         .content-frame {
@@ -139,42 +144,48 @@
             width: 100%;
             height: calc(100vh - 60px);
             border: none;
-            background: white;
         }
-
-        .btn-home {
-            background: transparent;
-            color: var(--cyber-blue);
-            border: 1px solid var(--cyber-blue);
-            padding: 8px 20px;
-            text-decoration: none;
-            font-size: 12px;
-            transition: 0.3s;
-        }
-
-        .btn-home:hover { background: var(--cyber-blue); color: black; }
     </style>
 </head>
 <body>
 
     <div id="cyber-entrance">
-        <div class="scanning-line"></div>
-        <div class="cyber-text" id="status">Analyzing...</div>
-        <button id="enter-btn" onclick="exitPortal()">Enter Terminal</button>
+        <div id="boot-text" class="cyber-text" style="font-size: 1.5rem;">Initializing Overview...</div>
+
+        <div id="overview-container">
+            <div class="dummy-card">
+                <h3>01 // Core Engine</h3>
+                <p>Advanced Google Apps Script Integration for real-time data processing.</p>
+            </div>
+            <div class="dummy-card">
+                <h3>02 // UI Design</h3>
+                <p>Cyber-styled responsive interface with lightning-reel visual effects.</p>
+            </div>
+            <div class="dummy-card">
+                <h3>03 // Security</h3>
+                <p>Encapsulated DNS masking via Iframe protection protocols.</p>
+            </div>
+            <div class="dummy-card">
+                <h3>04 // Connectivity</h3>
+                <p>Seamless execution within the GitHub Pages cloud ecosystem.</p>
+            </div>
+        </div>
+
+        <button id="main-enter-btn" onclick="openProject()">Run Deployment</button>
     </div>
 
     <header class="nav-bar">
-        <div><strong>ACCESS GRANTED //</strong> PROJECT_PORTAL_V3.0</div>
-        <a href="index.html" class="btn-home">Reload System</a>
+        <div><strong>PORTAL //</strong> PROJECT_LIVE_FEED</div>
+        <a href="index.html" style="color:var(--cyber-blue); text-decoration:none; font-size:12px; border:1fr solid var(--cyber-blue); padding:5px 10px;">REBOOT</a>
     </header>
 
     <iframe 
         src="https://script.google.com/macros/s/AKfycbyMBlbc9cG_WZhbpAXTvBvyahs76E9l42mXN3yxXGnGfZAefX-kUZJz6F8O15B-uza4/exec" 
-        class="content-frame"
-        sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals">
+        class="content-frame">
     </iframe>
 
     <script>
+        // Lightning Effect
         function createLightning() {
             const entrance = document.getElementById('cyber-entrance');
             const bolt = document.createElement('div');
@@ -187,26 +198,21 @@
             setTimeout(() => { bolt.style.opacity = '0'; }, 100);
             setTimeout(() => { bolt.remove(); }, 200);
         }
+        const lightningInterval = setInterval(createLightning, 200);
 
-        const lightningInterval = setInterval(createLightning, 150);
-
-        // System Boot Sequence
+        // Sequence Logic
         window.addEventListener('load', function() {
-            const status = document.getElementById('status');
-            const btn = document.getElementById('enter-btn');
-
-            setTimeout(() => { status.innerText = "System Ready"; }, 1500);
-            setTimeout(() => { 
-                status.style.display = "none";
-                btn.style.display = "block"; // THE POPUP ACTION
-            }, 2500);
+            setTimeout(() => {
+                document.getElementById('boot-text').style.display = 'none';
+                document.getElementById('overview-container').style.display = 'grid';
+                document.getElementById('main-enter-btn').style.display = 'block';
+            }, 2000);
         });
 
-        function exitPortal() {
+        function openProject() {
             clearInterval(lightningInterval);
             document.getElementById('cyber-entrance').classList.add('portal-exit');
         }
     </script>
-
 </body>
 </html>
