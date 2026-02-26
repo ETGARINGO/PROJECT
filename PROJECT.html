@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Access | Restricted</title>
+    <title>Project Showcase | Professional View</title>
     <style>
         :root {
-            --accent: #ff0000; /* Thriller Red */
-            --bg: #000000;
+            --cyber-blue: #00f2ff;
+            --cyber-pink: #ff00ff;
+            --bg-black: #050505;
         }
 
         body, html {
@@ -16,165 +17,195 @@
             height: 100vh;
             width: 100vw;
             overflow: hidden;
-            background: var(--bg);
-            font-family: 'Arial Black', Gadget, sans-serif;
+            font-family: 'Courier New', Courier, monospace;
+            background: var(--bg-black);
         }
 
-        /* --- ACTION THRILLER OVERLAY --- */
-        #thriller-overlay {
+        /* --- CYBER ENTRANCE OVERLAY --- */
+        #cyber-entrance {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--bg);
+            background: var(--bg-black);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
-            transition: all 0.6s cubic-bezier(0.95, 0.05, 0.795, 0.035);
+            z-index: 1000;
+            transition: all 0.8s cubic-bezier(0.87, 0, 0.13, 1);
         }
 
-        /* Heartbeat Pulsing Text */
-        .title-container {
-            text-align: center;
-            perspective: 1000px;
-        }
-
-        .main-title {
-            color: white;
-            font-size: 4rem;
-            letter-spacing: 15px;
-            margin: 0;
-            opacity: 0;
-            transform: scale(0.8) translateZ(-100px);
-            animation: impact 3s forwards ease-in-out;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-        }
-
-        .subtitle {
-            color: var(--accent);
-            font-size: 1rem;
-            letter-spacing: 5px;
-            margin-top: 10px;
-            opacity: 0;
-            animation: fadeIn 1s 1.5s forwards;
-        }
-
-        /* White Lightning Flash */
-        #flash {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        /* Lightning Reel Effect */
+        .lightning-bolt {
+            position: absolute;
+            width: 2px;
             background: white;
+            box-shadow: 0 0 20px 5px var(--cyber-blue);
             opacity: 0;
-            z-index: 10000;
             pointer-events: none;
         }
 
-        /* Keyframes */
-        @keyframes impact {
-            0% { opacity: 0; transform: scale(0.5) translateZ(-200px); filter: blur(20px); }
-            50% { opacity: 1; transform: scale(1.1) translateZ(50px); filter: blur(0px); }
-            80% { opacity: 1; transform: scale(1); }
-            100% { opacity: 1; transform: scale(1.05); }
+        .cyber-text {
+            color: var(--cyber-blue);
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 10px;
+            text-shadow: 0 0 10px var(--cyber-blue);
+            animation: flicker 0.1s infinite alternate;
+            z-index: 1001;
+            margin-bottom: 30px;
         }
 
-        @keyframes fadeIn {
-            to { opacity: 1; }
+        /* --- THE CYBER BUTTON POPUP --- */
+        #enter-btn {
+            display: none; /* Hidden until system boots */
+            background: transparent;
+            color: var(--cyber-pink);
+            border: 2px solid var(--cyber-pink);
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 5px;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+            box-shadow: 0 0 15px var(--cyber-pink);
+            animation: popup 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1002;
         }
 
-        @keyframes flash-bang {
-            0% { opacity: 0; }
-            10% { opacity: 1; }
-            100% { opacity: 0; }
+        #enter-btn:hover {
+            background: var(--cyber-pink);
+            color: white;
+            box-shadow: 0 0 40px var(--cyber-pink);
+            transform: scale(1.1);
         }
 
-        /* Exit Sequence */
-        .reveal-site {
-            transform: scale(5);
+        @keyframes popup {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .scanning-line {
+            width: 100%;
+            height: 4px;
+            background: var(--cyber-blue);
+            position: absolute;
+            top: 0;
+            box-shadow: 0 0 15px var(--cyber-blue);
+            animation: scan 2s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        /* Exit Animation */
+        .portal-exit {
+            transform: translateY(-100%);
             opacity: 0;
-            visibility: hidden;
         }
 
-        /* --- PROJECT VIEW --- */
+        /* --- CONTENT UI --- */
         .nav-bar {
-            height: 50px;
+            height: 60px;
             background: #111;
-            color: #555;
+            color: var(--cyber-blue);
             display: flex;
             align-items: center;
             padding: 0 20px;
             justify-content: space-between;
-            border-bottom: 1px solid #333;
+            border-bottom: 2px solid var(--cyber-blue);
+            z-index: 100;
         }
 
         .content-frame {
             position: absolute;
-            top: 50px;
+            top: 60px;
             bottom: 0;
             left: 0;
             right: 0;
             width: 100%;
-            height: calc(100vh - 50px);
+            height: calc(100vh - 60px);
             border: none;
-            background: #fff;
+            background: white;
         }
 
-        .btn-refresh {
-            color: #888;
+        .btn-home {
+            background: transparent;
+            color: var(--cyber-blue);
+            border: 1px solid var(--cyber-blue);
+            padding: 8px 20px;
             text-decoration: none;
-            font-size: 11px;
-            border: 1px solid #444;
-            padding: 5px 12px;
+            font-size: 12px;
             transition: 0.3s;
         }
 
-        .btn-refresh:hover { color: white; border-color: white; }
+        .btn-home:hover { background: var(--cyber-blue); color: black; }
     </style>
 </head>
 <body>
 
-    <div id="flash"></div>
-
-    <div id="thriller-overlay">
-        <div class="title-container">
-            <h1 class="main-title">INITIATING</h1>
-            <div class="subtitle">PREPARE FOR DEPLOYMENT</div>
-        </div>
+    <div id="cyber-entrance">
+        <div class="scanning-line"></div>
+        <div class="cyber-text" id="status">Analyzing...</div>
+        <button id="enter-btn" onclick="exitPortal()">Enter Terminal</button>
     </div>
 
     <header class="nav-bar">
-        <div><strong>SECURE_LINK //</strong> PROJECT_ALPHA</div>
-        <a href="index.html" class="btn-refresh">RE-SYNC</a>
+        <div><strong>ACCESS GRANTED //</strong> PROJECT_PORTAL_V3.0</div>
+        <a href="index.html" class="btn-home">Reload System</a>
     </header>
 
     <iframe 
         src="https://script.google.com/macros/s/AKfycbyMBlbc9cG_WZhbpAXTvBvyahs76E9l42mXN3yxXGnGfZAefX-kUZJz6F8O15B-uza4/exec" 
         class="content-frame"
-        allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
         sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals">
     </iframe>
 
     <script>
+        function createLightning() {
+            const entrance = document.getElementById('cyber-entrance');
+            const bolt = document.createElement('div');
+            bolt.classList.add('lightning-bolt');
+            bolt.style.left = Math.random() * 100 + '%';
+            bolt.style.height = (Math.random() * 100 + 50) + 'vh';
+            bolt.style.top = (Math.random() * 50) + '%';
+            entrance.appendChild(bolt);
+            setTimeout(() => { bolt.style.opacity = '1'; }, 10);
+            setTimeout(() => { bolt.style.opacity = '0'; }, 100);
+            setTimeout(() => { bolt.remove(); }, 200);
+        }
+
+        const lightningInterval = setInterval(createLightning, 150);
+
+        // System Boot Sequence
         window.addEventListener('load', function() {
-            const overlay = document.getElementById('thriller-overlay');
-            const flash = document.getElementById('flash');
+            const status = document.getElementById('status');
+            const btn = document.getElementById('enter-btn');
 
-            // 1. Wait for dramatic effect
-            setTimeout(() => {
-                // 2. Trigger Lightning Flash
-                flash.style.animation = "flash-bang 0.4s ease-out forwards";
-                
-                // 3. Zoom out and reveal
-                setTimeout(() => {
-                    overlay.classList.add('reveal-site');
-                }, 100);
-
-            }, 3500); // Sequence starts at 3.5 seconds
+            setTimeout(() => { status.innerText = "System Ready"; }, 1500);
+            setTimeout(() => { 
+                status.style.display = "none";
+                btn.style.display = "block"; // THE POPUP ACTION
+            }, 2500);
         });
+
+        function exitPortal() {
+            clearInterval(lightningInterval);
+            document.getElementById('cyber-entrance').classList.add('portal-exit');
+        }
     </script>
 
 </body>
