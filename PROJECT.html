@@ -5,17 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Showcase | Professional View</title>
     <style>
-        /* Reset and Full Screen setup */
+        :root {
+            --primary-color: #4CAF50;
+            --bg-dark: #121212;
+            --text-light: #ffffff;
+        }
+
         body, html {
             margin: 0;
             padding: 0;
             height: 100vh;
             width: 100vw;
-            overflow: hidden; /* Prevents double scrollbars */
-            font-family: sans-serif;
+            overflow: hidden;
+            font-family: 'Segoe UI', Roboto, sans-serif;
         }
 
-        /* The Header stays fixed at the top */
+        /* --- ENTRANCE ANIMATION STYLES --- */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease-out, visibility 0.8s;
+        }
+
+        .loader-logo {
+            font-size: 2rem;
+            color: white;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            animation: fadeInOut 2s infinite ease-in-out;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes fadeInOut { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+        .fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* --- MAIN UI STYLES --- */
         .nav-bar {
             height: 60px;
             background: #1a1a1a;
@@ -29,43 +76,67 @@
             z-index: 100;
         }
 
-        /* The Content Area fills the rest of the screen */
         .content-frame {
             position: absolute;
-            top: 60px; /* Offset by header height */
+            top: 60px;
             bottom: 0;
             left: 0;
             right: 0;
             width: 100%;
             height: calc(100vh - 60px);
             border: none;
+            background: white;
         }
 
         .btn-home {
-            background: #4CAF50;
+            background: var(--primary-color);
             color: white;
-            padding: 8px 15px;
+            padding: 8px 20px;
             text-decoration: none;
-            border-radius: 4px;
+            border-radius: 20px;
             font-size: 14px;
+            font-weight: bold;
+            transition: transform 0.2s;
         }
+
+        .btn-home:hover { transform: scale(1.05); }
+
     </style>
 </head>
 <body>
 
+    <div id="splash-screen">
+        <div class="loader-logo">INITIALIZING PROJECT...</div>
+        <div class="spinner"></div>
+    </div>
+
     <header class="nav-bar">
         <div>
-            <strong>CLIENT PORTAL:</strong> Your Project Name
+            <span style="color: #888;">PORTAL /</span> 
+            <strong>YOUR PROJECT NAME</strong>
         </div>
-        <a href="index.html" class="btn-home">Refresh View</a>
+        <a href="index.html" class="btn-home">REFRESH</a>
     </header>
 
     <iframe 
+        id="project-iframe"
         src="https://script.google.com/macros/s/AKfycbyMBlbc9cG_WZhbpAXTvBvyahs76E9l42mXN3yxXGnGfZAefX-kUZJz6F8O15B-uza4/exec" 
         class="content-frame"
         allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
         sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals">
     </iframe>
+
+    <script>
+        // Wait for the iframe to load or a fixed timeout
+        window.addEventListener('load', function() {
+            const splash = document.getElementById('splash-screen');
+            
+            // We give it a small extra delay so the animation looks intentional
+            setTimeout(() => {
+                splash.classList.add('fade-out');
+            }, 2500); // 2.5 seconds of intro
+        });
+    </script>
 
 </body>
 </html>
