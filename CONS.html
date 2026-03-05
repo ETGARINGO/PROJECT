@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROJECT DATABASE | SECURE_ACCESS</title>
+
+    <style>
+        :root {
+            --hazard-red: #ff0000;
+            --neon-blue: #00f2ff;
+            --disco-pink: #ff00ff;
+            --laser-green: #39ff14;
+            --terminal-dark: #050505;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+
+        body {
+            background: var(--terminal-dark);
+            font-family: 'Consolas', 'Courier New', monospace;
+            overflow: hidden;
+            height: 100vh;
+            color: var(--laser-green);
+        }
+
+        /* ================= CRT SCANLINE OVERLAY ================= */
+        body::after {
+            content: " ";
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05));
+            z-index: 10008;
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none;
+        }
+
+        /* ================= HUD VISUALIZER ================= */
+        .viz-hud {
+            position: absolute;
+            top: 75px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 350px;
+            height: 40px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 3px;
+            z-index: 10007;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        .bar {
+            flex: 1;
+            background: var(--laser-green);
+            height: 2px;
+            box-shadow: 0 0 15px var(--laser-green);
+            transition: height 0.05s ease;
+        }
+
+        /* ================= DISCO STROBE FX ================= */
+        #lightning-flash {
+            position: fixed;
+            inset: 0;
+            background: white;
+            opacity: 0;
+            z-index: 10010;
+            pointer-events: none;
+        }
+
+        /* ================= BATTLEFIELD SMOKE ================= */
+        .smoke-layer {
+            position: fixed;
+            bottom: -50px;
+            width: 100%;
+            height: 300px;
+            background: radial-gradient(circle, rgba(57, 255, 20, 0.1) 0%, transparent 70%);
+            filter: blur(60px);
+            z-index: 10005;
+            pointer-events: none;
+            animation: drift 12s infinite alternate;
+        }
+
+        @keyframes drift {
+            from { transform: translateX(-15%); opacity: 0.2; }
+            to { transform: translateX(15%); opacity: 0.4; }
+        }
+
+        /* ================= SYSTEM VIBRATION ================= */
+        .disco-shake {
+            animation: shake 0.1s infinite alternate;
+            animation-play-state: paused;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px); filter: contrast(1.2) brightness(1.2); }
+            100% { transform: translate(-1px, -1px); filter: contrast(1.5) brightness(1.5); }
+        }
+
+        /* ================= VIDEO BACKGROUND ================= */
+        .video-background {
+            position: fixed;
+            inset: 0;
+            min-width: 100%; min-height: 100%;
+            z-index: -1;
+            filter: grayscale(1) sepia(1) hue-rotate(90deg) brightness(0.15);
+            object-fit: cover;
+        }
+
+        /* ================= DATABASE ENTRANCE ================= */
+        #war-disco-gate {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            transition: 0.6s cubic-bezier(0.85, 0, 0.15, 1);
+        }
+
+        .disco-box {
+            border: 2px solid var(--laser-green);
+            padding: 50px;
+            background: #000;
+            text-align: center;
+            box-shadow: 0 0 40px var(--laser-green), inset 0 0 20px var(--laser-green);
+        }
+
+        .disco-text {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 0.9;
+            color: #fff;
+            text-shadow: 0 0 20px var(--laser-green);
+            animation: glitch-text 0.428s infinite;
+        }
+
+        @keyframes glitch-text {
+            50% { transform: skewX(10deg); color: var(--hazard-red); }
+        }
+
+        /* ================= NAV BAR ================= */
+        .nav-bar {
+            height: 75px;
+            background: rgba(0, 0, 0, 0.95);
+            border-bottom: 2px solid var(--laser-green);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 100;
+        }
+
+        .btn-drop {
+            background: var(--laser-green);
+            color: #000;
+            padding: 12px 30px;
+            font-weight: 900;
+            text-decoration: none;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+            transition: 0.1s;
+        }
+
+        .btn-drop:hover { background: var(--hazard-red); color: #fff; }
+
+        /* ================= CONTENT ================= */
+        .content-frame {
+            position: absolute;
+            top: 75px; left: 0;
+            width: 100%; height: calc(100% - 75px);
+            border: none;
+            filter: hue-rotate(90deg) brightness(0.8);
+        }
+
+        .gate-open { transform: scale(1.5); opacity: 0; pointer-events: none; }
+    </style>
+</head>
+<body id="main-body" class="disco-shake">
+
+    <div id="lightning-flash"></div>
+    <div class="smoke-layer"></div>
+
+    <div class="viz-hud" id="visualizer"></div>
+
+    <audio id="disco-rock" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="hit-sfx">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" type="audio/mpeg">
+    </audio>
+
+    <video autoplay muted loop playsinline class="video-background">
+        <source src="Screen Recording 2026-03-05 224722.mp4" type="video/mp4">
+    </video>
+
+    <div id="war-disco-gate" onclick="initiateMayhem()">
+        <div class="disco-box">
+            <div class="disco-text">PROJECT<br>DATABASE</div>
+            <div style="margin-top:25px; letter-spacing: 5px; color: var(--laser-green);">[ INITIALIZE BREACH ]</div>
+        </div>
+    </div>
+
+    <header class="nav-bar">
+        <div style="font-style: italic; color: var(--laser-green);">
+            SYSTEM_LOG: PROJECT_DATABASE_ACTIVE // CORE_BYPASS_SUCCESS
+        </div>
+        <a href="javascript:location.reload()" class="btn-drop">TERMINATE</a>
+    </header>
+
+    <iframe src="https://script.google.com/macros/s/AKfycbyPzCSYXQrHZJODqGTeyVGaLHe7QWSnoWNia6oEqvoFl4RWyucV6gelyc1ZcDdXmBKN/exec" class="content-frame"></iframe>
+
+    <script>
+        const gate = document.getElementById('war-disco-gate');
+        const body = document.getElementById('main-body');
+        const music = document.getElementById('disco-rock');
+        const flash = document.getElementById('lightning-flash');
+        const sfx = document.getElementById('hit-sfx');
+        const viz = document.getElementById('visualizer');
+
+        // Build Visualizer Bars
+        for(let i=0; i<35; i++) {
+            let bar = document.createElement('div');
+            bar.className = 'bar';
+            viz.appendChild(bar);
+        }
+        const bars = document.querySelectorAll('.bar');
+
+        function triggerFlash(intensity = 0.4) {
+            flash.style.opacity = intensity;
+            sfx.currentTime = 0;
+            sfx.play();
+            setTimeout(() => { flash.style.opacity = "0"; }, 50);
+            
+            bars.forEach(b => b.style.height = (Math.random() * 40 + 15) + 'px');
+        }
+
+        function initiateMayhem() {
+            music.volume = 0.6;
+            music.play();
+            
+            body.style.animationPlayState = "running";
+            viz.style.opacity = "1";
+            triggerFlash(1);
+
+            setInterval(() => {
+                triggerFlash(0.12);
+            }, 428); 
+
+            setInterval(() => {
+                bars.forEach(b => {
+                    let h = Math.random() * 18;
+                    b.style.height = h + 'px';
+                });
+            }, 80);
+
+            setTimeout(() => {
+                gate.classList.add('gate-open');
+            }, 400);
+        }
+
+        document.addEventListener('mousedown', () => {
+            if(body.style.animationPlayState === "running") triggerFlash(0.3);
+        });
+    </script>
+</body>
+</html>
