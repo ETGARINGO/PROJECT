@@ -14,10 +14,10 @@
             --neon: #39ff14;
             --neon-dim: rgba(57, 255, 20, 0.3);
             --deep-obsidian: #020202;
-            --metal: #0d0d0d;
-            --glass: rgba(15, 15, 15, 0.85);
+            --glass: rgba(12, 12, 12, 0.9);
             --danger: #ff3e3e;
             --gold: #ffcc00;
+            --info: #00d4ff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
@@ -28,209 +28,228 @@
             height: 100vh; overflow: hidden;
         }
 
-        /* --- CRT SCANLINE EFFECT --- */
+        /* --- VISUAL FX --- */
         body::after {
             content: " "; position: fixed; inset: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(57, 255, 20, 0.02), transparent, rgba(57, 255, 20, 0.02));
             z-index: 9999; background-size: 100% 3px, 3px 100%; pointer-events: none;
         }
 
-        /* --- 3D BACKGROUND DEPTH --- */
-        .neural-net {
-            position: fixed; inset: 0; z-index: -1;
-            background: radial-gradient(circle at center, #111 0%, #000 100%);
-            overflow: hidden;
-        }
+        .neural-net { position: fixed; inset: 0; z-index: -1; background: #000; overflow: hidden; }
         .neural-grid {
             position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
-            background-image: linear-gradient(var(--neon-dim) 1px, transparent 1px), linear-gradient(90deg, var(--neon-dim) 1px, transparent 1px);
-            background-size: 60px 60px; transform: rotateX(45deg) translateZ(-100px);
-            animation: grid-advance 30s linear infinite; opacity: 0.2;
+            background-image: linear-gradient(var(--neon-dim) 1px, transparent 1px), 
+                              linear-gradient(90deg, var(--neon-dim) 1px, transparent 1px);
+            background-size: 60px 60px; transform: rotateX(55deg);
+            animation: grid-move 25s linear infinite; opacity: 0.12;
         }
-        @keyframes grid-advance { from { transform: rotateX(45deg) translateY(0); } to { transform: rotateX(45deg) translateY(60px); } }
+        @keyframes grid-move { from { transform: rotateX(55deg) translateY(0); } to { transform: rotateX(55deg) translateY(60px); } }
 
-        /* --- BIOMETRIC OVERLAY --- */
+        /* --- ENTRANCE GATE --- */
         #gate-keeper {
             position: fixed; inset: 0; background: var(--deep-obsidian);
             z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: 1.5s cubic-bezier(1, 0, 0, 1);
+            transition: 1s cubic-bezier(0.7, 0, 0.3, 1);
         }
-        .gate-open { transform: scale(5); opacity: 0; pointer-events: none; filter: blur(20px); }
+        .gate-open { transform: translateY(-100%); opacity: 0; pointer-events: none; }
 
+        .auth-portal {
+            width: 280px; height: 280px; position: relative;
+            display: flex; justify-content: center; align-items: center; cursor: pointer;
+        }
         .auth-ring {
-            width: 300px; height: 300px; border: 2px solid var(--neon-dim);
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            position: relative; box-shadow: 0 0 50px #000;
+            position: absolute; inset: 0; border: 2px solid var(--neon-dim);
+            border-radius: 50%; animation: pulse-ring 2s infinite;
         }
-        .auth-ring::before {
-            content: ""; position: absolute; inset: -15px; border: 1px dashed var(--neon);
-            border-radius: 50%; animation: rotate 10s linear infinite;
+        .auth-portal img {
+            width: 150px; height: 150px; object-fit: contain;
+            filter: drop-shadow(0 0 15px var(--neon)); z-index: 5;
         }
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes pulse-ring { 0% { transform: scale(0.8); opacity: 1; } 100% { transform: scale(1.3); opacity: 0; } }
 
-        /* --- LAYOUT ARCHITECTURE --- */
+        /* --- MAIN UI LAYOUT --- */
         .app-shell {
-            display: grid; grid-template-columns: 360px 1fr; grid-template-rows: 90px 1fr;
-            height: 100vh; width: 100vw; padding: 20px; gap: 20px;
+            display: grid; grid-template-columns: 380px 1fr; grid-template-rows: 80px 1fr;
+            height: 100vh; width: 100vw; padding: 15px; gap: 15px;
         }
 
         .sidebar {
-            grid-row: 1 / 3; background: var(--glass); backdrop-filter: blur(15px);
-            border: 1px solid rgba(255,255,255,0.05); border-left: 4px solid var(--neon);
-            display: flex; flex-direction: column; overflow: hidden; border-radius: 4px;
+            grid-row: 1 / 3; background: var(--glass); border: 1px solid rgba(255,255,255,0.05);
+            border-left: 4px solid var(--neon); display: flex; flex-direction: column; overflow: hidden;
         }
 
-        .sidebar-header { padding: 30px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .sidebar-header h1 { font-family: 'Orbitron'; font-size: 1.1rem; color: var(--neon); letter-spacing: 5px; }
-
-        .search-container { margin: 20px; position: relative; }
-        .search-container input {
-            width: 100%; background: #000; border: 1px solid #333; padding: 12px 40px;
-            color: var(--neon); font-family: 'JetBrains Mono'; font-size: 0.8rem; outline: none;
-        }
-        .search-container i { position: absolute; left: 15px; top: 12px; color: var(--neon); }
+        .sidebar-header { padding: 25px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sidebar-header h1 { font-family: 'Orbitron'; font-size: 0.9rem; color: var(--neon); letter-spacing: 4px; }
 
         .nav-list { flex: 1; overflow-y: auto; padding: 10px; }
         .nav-item {
-            padding: 16px 20px; margin-bottom: 8px; background: rgba(255,255,255,0.02);
-            display: flex; align-items: center; justify-content: space-between;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 14px 18px; margin-bottom: 6px; background: rgba(255,255,255,0.02);
+            display: flex; align-items: center; gap: 15px; transition: 0.2s; border-radius: 2px;
+            font-size: 0.75rem;
         }
-        .nav-item:hover { background: rgba(57, 255, 20, 0.08); transform: translateX(10px); }
+        .nav-item:hover { background: rgba(57, 255, 20, 0.1); transform: translateX(5px); }
         .nav-item.active { background: var(--neon); color: #000; font-weight: 800; }
-        .nav-item i { font-size: 1.2rem; }
 
-        .status-dot { width: 8px; height: 8px; background: var(--neon); border-radius: 50%; box-shadow: 0 0 10px var(--neon); }
+        header { background: var(--glass); border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: space-between; padding: 0 25px; }
+        .kpi-card { background: var(--glass); padding: 15px; border-bottom: 2px solid var(--neon-dim); }
+        .kpi-card b { font-family: 'Orbitron'; font-size: 0.95rem; color: var(--neon); }
 
-        /* --- MAIN INTERFACE --- */
-        header { 
-            background: var(--glass); backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;
-            display: flex; align-items: center; justify-content: space-between; padding: 0 30px;
+        /* --- RUNNING BORDER LOADING STYLE --- */
+        .viewport-wrapper {
+            position: relative; flex: 1; padding: 3px; 
+            background: #000; overflow: hidden;
+            display: flex; flex-direction: column;
         }
 
-        .viewport-container {
-            background: #000; border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 4px; overflow: hidden; position: relative;
+        /* The Animated Snake Border */
+        .viewport-wrapper.loading::before {
+            content: ''; position: absolute; height: 150%; width: 150%;
+            background-image: conic-gradient(transparent, transparent, transparent, var(--neon));
+            left: -25%; top: -25%;
+            animation: rotate-border 3s linear infinite;
         }
-        iframe { width: 100%; height: 100%; border: none; opacity: 0.9; transition: 0.5s; }
+        @keyframes rotate-border { 100% { transform: rotate(360deg); } }
 
-        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 15px; }
-        .kpi-card { 
-            background: var(--glass); padding: 15px 25px; border-radius: 4px;
-            border-bottom: 2px solid var(--neon-dim);
+        .viewport { 
+            background: #000; flex: 1; width: 100%; height: 100%; 
+            position: relative; z-index: 1; overflow: hidden;
         }
-        .kpi-card span { font-size: 0.6rem; color: #666; font-family: 'Orbitron'; display: block; margin-bottom: 5px;}
-        .kpi-card b { font-family: 'Orbitron'; font-size: 1.1rem; color: var(--neon); }
-
-        .logout-btn {
-            background: none; border: 1px solid var(--danger); color: var(--danger);
-            padding: 8px 20px; font-family: 'Orbitron'; font-size: 0.7rem; transition: 0.3s;
-        }
-        .logout-btn:hover { background: var(--danger); color: #fff; box-shadow: 0 0 20px rgba(255, 62, 62, 0.4); }
-
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--neon); }
+        iframe { width: 100%; height: 100%; border: none; opacity: 0; transition: 0.5s; }
     </style>
 </head>
 <body>
 
+    <audio id="bg-music" loop>
+        <source src="https://codeskulptor-demos.commondatastorage.googleapis.com/pang/paza-moduless.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sfx-unlock">
+        <source src="https://codeskulptor-demos.commondatastorage.googleapis.com/descent/Cymbal_Clap.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sfx-nav">
+        <source src="https://rpg.hamsterrepublic.com/ohrrpgce/sounds/click.wav" type="audio/mpeg">
+    </audio>
+
     <div class="neural-net"><div class="neural-grid"></div></div>
 
     <div id="gate-keeper">
-        <div class="auth-ring" onclick="unlock()">
-            <img src="5FC6C77A-BAD0-4FFA-B908-DBEA57CFCB03.png" style="width:140px; filter: drop-shadow(0 0 20px var(--neon));">
+        <div class="auth-portal" onclick="unlock()">
+            <div class="auth-ring"></div>
+            <img src="5FC6C77A-BAD0-4FFA-B908-DBEA57CFCB03.png" alt="OS LOGO">
         </div>
         <div style="margin-top: 40px; text-align: center;">
-            <p style="font-family: 'Orbitron'; color: var(--neon); letter-spacing: 8px; font-weight: 900; animation: pulse 2s infinite;">PROJECT_ACCESS_PORTAL_SAMPLES</p>
-            <p style="color: #444; font-size: 0.7rem; margin-top: 10px;">ENCRYPTED SESSION V9.0 // APEX_CORE</p>
+            <p style="font-family: 'Orbitron'; color: var(--neon); letter-spacing: 10px; font-weight: 900;">PROJECT DASHBOARD</p>
+            <p style="color: #444; font-size: 0.65rem; margin-top: 10px;">SYSTEM BORDER SYNCHRONIZATION ACTIVE</p>
         </div>
     </div>
 
     <div class="app-shell">
         <aside class="sidebar">
-            <div class="sidebar-header"><h1>PROJECT DASHBOARD</h1></div>
-            
-            <div class="search-container">
-                <i class="bi bi-search"></i>
-                <input type="text" id="modSearch" placeholder="NEURAL_SEARCH..." onkeyup="filter()">
+            <div class="sidebar-header"><h1>ONLINE WEB APP PROJECTS | COMMAND_OS</h1></div>
+            <div style="padding: 15px;">
+                <input type="text" id="modSearch" placeholder="SEARCH..." onkeyup="filter()" 
+                       style="width: 100%; background: #000; border: 1px solid #222; padding: 10px; color: var(--neon); font-family: 'JetBrains Mono'; outline: none;">
             </div>
-
             <div class="nav-list" id="nav-list"></div>
-
-            <div style="padding: 20px; background: rgba(0,0,0,0.4); font-size: 0.6rem;">
-                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                    <span style="color:#444">CORE_STATUS:</span><span style="color:var(--neon)">STABLE</span>
-                </div>
-                <div id="status-log" style="color:var(--neon); opacity: 0.7;">Ready for sync...</div>
+            <div style="padding: 15px; font-size: 0.6rem; border-top: 1px solid #111;">
+                <div id="status-log" style="color:var(--neon); opacity: 0.8;">Awaiting uplink...</div>
             </div>
         </aside>
 
         <header>
-            <div style="display:flex; gap:40px;">
-                <div style="font-size:0.7rem; font-family:'Orbitron'; color:#666">ACTIVE_NODE: <span style="color:var(--neon)" id="current-mod">CORE_DASH</span></div>
-                <div style="font-size:0.7rem; font-family:'Orbitron'; color:#666">UPTIME: <span style="color:var(--neon)">99.99%</span></div>
-            </div>
-            <div id="clock" style="font-family:'Orbitron'; font-size: 1.4rem; color: var(--neon); text-shadow: 0 0 10px var(--neon-dim);">00:00:00</div>
-            <button class="logout-btn" onclick="location.reload()">TERMINATE_LINK</button>
+            <div style="font-family:'Orbitron'; font-size:0.65rem; color:#555">NODE: <span style="color:var(--neon)" id="current-mod">---</span></div>
+            <div id="clock" style="font-family:'Orbitron'; font-size: 1.3rem; color: var(--neon);">00:00:00</div>
+            <button style="background:none; border:1px solid var(--danger); color:var(--danger); padding:5px 15px; font-size:0.6rem; font-family:'Orbitron';" onclick="location.reload()">TERMINATE</button>
         </header>
 
-        <main style="display: flex; flex-direction: column;">
-            <div class="kpi-grid">
-                <div class="kpi-card"><span>TOTAL_REVENUE</span><b id="kpi-rev">$0.00</b></div>
-                <div class="kpi-card"><span>ACTIVE_NEURONS</span><b>4,821</b></div>
-                <div class="kpi-card"><span>DATA_STREAM</span><b id="kpi-stream">0.0 GB/s</b></div>
-                <div class="kpi-card"><span>LATENCY</span><b>0.002ms</b></div>
+        <main style="display: flex; flex-direction: column; gap: 15px;">
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+                <div class="kpi-card"><span>REVENUE</span><br><b id="kpi-rev">$0.00</b></div>
+                <div class="kpi-card"><span>NEURAL_LINK</span><br><b>ACTIVE</b></div>
+                <div class="kpi-card"><span>STREAM</span><br><b id="kpi-stream">0.0 GB/s</b></div>
+                <div class="kpi-card"><span>LATENCY</span><br><b>0.002ms</b></div>
             </div>
-
-            <div class="viewport-container" style="flex:1;">
-                <iframe id="main-view" src="about:blank"></iframe>
+            
+            <div class="viewport-wrapper" id="view-wrapper">
+                <div class="viewport">
+                    <iframe id="main-view" src="about:blank" onload="stopLoading()"></iframe>
+                </div>
             </div>
         </main>
     </div>
 
     <script>
         const appData = [
-            { title: "Staycation Booking", link: "https://staycationapp.web247.online/BOOKING", icon: "bi-calendar2-range", color: "var(--gold)" },
-            { title: "Staycation Admin", link: "https://staycationapp.web247.online/admin", icon: "bi-shield-check", color: "var(--neon)" },
-            { title: "GCash & E-Load", link: "https://script.google.com/macros/s/AKfycbwfZDpTxL4IgOqzK7X87XuNopCd7UpgaGRmkAnQ7gQu7JZkQrdalTndrn7J4BQZMVb7/exec", icon: "bi-lightning-charge", color: "var(--warning)" },
-            { title: "Water Station Order", link: "https://aquapure.web247.online/Order", icon: "bi-droplet-half", color: "#00d4ff" },
-            { title: "Water Station Admin", link: "https://aquapure.web247.online/Admin", icon: "bi-database-gear", color: "var(--neon)" },
-            { title: "Online Application", link: "https://www.facebook.com/share/v/17tmq4czHZ/", icon: "bi-person-badge", color: "#198754" },
-            { title: "Resto Bars & Cafe", link: "https://bondat.web247.online/Dash", icon: "bi-cup-hot", color: "var(--warning)" },
+            { title: "Staycation Booking", link: "https://staycationapp.web247.online/BOOKING", icon: "bi-person-badge", color: "var(--gold)" },
+            { title: "Staycation Admin", link: "https://staycationapp.web247.online/admin", icon: "bi-shield-check", color: "var(--info)" },
+            { title: "GCash & E-Load", link: "https://www.facebook.com/share/v/1DxqGDdWdx/", icon: "bi-wallet2", color: "#ffc107" },
+            { title: "Water Order", link: "https://aquapure.web247.online/Order", icon: "bi-droplet", color: "var(--info)" },
+            { title: "Water Admin", link: "https://aquapure.web247.online/Admin", icon: "bi-gear", color: "var(--info)" },
+            { title: "Recruitment System", link: "https://www.facebook.com/share/v/17tmq4czHZ/", icon: "bi-file-earmark-text", color: "#198754" },
+            { title: "Resto Bars & Cafe", link: "https://bondat.web247.online/Dash", icon: "bi-cup-hot", color: "#ffc107" },
             { title: "Resto Admin", link: "https://bondat.web247.online/admin", icon: "bi-lock", color: "var(--danger)" },
-            { title: "Barbershop Booking", link: "https://www.facebook.com/share/v/1B8GHYGgDb/", icon: "bi-scissors", color: "#6c757d" },
-            { title: "RSVP Invitation", link: "https://www.facebook.com/share/r/186dkTk3ry/", icon: "bi-envelope-paper", color: "var(--danger)" },
-            { title: "Inventory Tracker", link: "https://www.facebook.com/share/p/1HCuQwMZLq/", icon: "bi-boxes", color: "#6c757d" },
-            { title: "Payroll Calculator", link: "https://www.facebook.com/on.line.151642", icon: "bi-calculator", color: "#198754" }
+            { title: "Barbershop App", link: "https://www.facebook.com/share/v/1B8GHYGgDb/", icon: "bi-scissors", color: "#6c757d" },
+            { title: "RSVP Invitation", link: "https://www.facebook.com/share/r/186dkTk3ry/", icon: "bi-envelope", color: "var(--danger)" },
+            { title: "Wish List Party", link: "https://www.facebook.com/share/p/1HR5fG2NCq/", icon: "bi-gift", color: "var(--info)" },
+            { title: "Sari-Sari Stock", link: "https://www.facebook.com/share/r/1awMk9YjXy/", icon: "bi-box", color: "#198754" },
+            { title: "Record Storage", link: "https://www.facebook.com/share/p/1NRkBxbg9U/", icon: "bi-database", color: "var(--info)" },
+            { title: "Logo Maker", link: "https://www.facebook.com/share/1JsdCtyTEf/", icon: "bi-palette", color: "#ffc107" },
+            { title: "Hilot Booking", link: "https://www.facebook.com/share/v/14ZUQUK38jS/", icon: "bi-hand-index-thumb", color: "#198754" },
+            { title: "Inventory Tracker", link: "https://www.facebook.com/share/p/1HCuQwMZLq/", icon: "bi-box-seam", color: "#6c757d" },
+            { title: "Payroll Calc", link: "https://www.facebook.com/on.line.151642", icon: "bi-calculator", color: "#198754" },
+            { title: "Fleet Management", link: "https://www.facebook.com/on.line.151642", icon: "bi-truck", color: "var(--info)" },
+            { title: "Procurement", link: "https://www.facebook.com/on.line.151642", icon: "bi-cart-check", color: "#ffc107" },
+            { title: "E-Library", link: "https://www.facebook.com/on.line.151642", icon: "bi-book", color: "var(--info)" },
+            { title: "Client CRM", link: "https://www.facebook.com/on.line.151642", icon: "bi-person-vcard", color: "var(--danger)" },
+            { title: "Task Scheduler", link: "https://www.facebook.com/on.line.151642", icon: "bi-calendar-check", color: "var(--info)" },
+            { title: "Survey Tool", link: "https://www.facebook.com/on.line.151642", icon: "bi-clipboard-data", color: "#198754" },
+            { title: "Visitor Logbook", link: "https://www.facebook.com/on.line.151642", icon: "bi-person-walking", color: "#6c757d" },
+            { title: "Barangay Info", link: "https://www.facebook.com/share/p/17DpaZqCdr/", icon: "bi-info-circle", color: "#6c757d" }
         ];
 
+        function playSFX(id) {
+            const sound = document.getElementById(id);
+            sound.currentTime = 0;
+            sound.play();
+        }
+
         function unlock() {
+            playSFX('sfx-unlock');
+            document.getElementById('bg-music').volume = 0.3;
+            document.getElementById('bg-music').play();
             document.getElementById('gate-keeper').classList.add('gate-open');
             setTimeout(() => {
-                document.getElementById('kpi-rev').innerText = "$512,084.10";
-                log("Neural link established. Full permissions granted.");
-            }, 1000);
+                document.getElementById('kpi-rev').innerText = "$921,084.10";
+                mount(0);
+            }, 800);
         }
 
         function mount(idx) {
+            playSFX('sfx-nav');
             const data = appData[idx];
             const frame = document.getElementById('main-view');
+            const wrapper = document.getElementById('view-wrapper');
+            
+            // Trigger Loading Border
+            wrapper.classList.add('loading');
             frame.style.opacity = '0';
             
             setTimeout(() => {
                 frame.src = data.link;
-                frame.style.opacity = '1';
                 document.getElementById('current-mod').innerText = data.title.toUpperCase();
                 document.querySelectorAll('.nav-item').forEach((item, i) => {
                     item.classList.toggle('active', i === idx);
                 });
-                log(`Syncing with ${data.title}... Done.`);
-            }, 400);
+                document.getElementById('status-log').innerText = `> Requesting Node: ${data.title}...`;
+            }, 300);
         }
 
-        function log(msg) {
-            document.getElementById('status-log').innerText = `> ${msg}`;
+        function stopLoading() {
+            const wrapper = document.getElementById('view-wrapper');
+            const frame = document.getElementById('main-view');
+            wrapper.classList.remove('loading');
+            frame.style.opacity = '1';
+            document.getElementById('status-log').innerText = `> Uplink Stable.`;
         }
 
         function filter() {
@@ -244,23 +263,15 @@
         appData.forEach((app, i) => {
             const el = document.createElement('div');
             el.className = 'nav-item';
-            el.innerHTML = `
-                <div style="display:flex; align-items:center; gap:15px;">
-                    <i class="${app.icon}" style="color:${app.color}"></i>
-                    <span>${app.title}</span>
-                </div>
-                <div class="status-dot"></div>
-            `;
+            el.innerHTML = `<i class="${app.icon}" style="color:${app.color}"></i><span>${app.title}</span>`;
             el.onclick = () => mount(i);
             nav.appendChild(el);
         });
 
         setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-            document.getElementById('kpi-stream').innerText = (Math.random() * 2 + 0.5).toFixed(2) + " GB/s";
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-GB');
+            document.getElementById('kpi-stream').innerText = (Math.random() * 4 + 1).toFixed(2) + " GB/s";
         }, 1000);
-
-        mount(0);
     </script>
 </body>
 </html>
