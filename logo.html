@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIZ-PRO GEN-7 // DYNAMIC TACTICAL ENGINE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #020617; --panel: #0f172a; --accent: #38bdf8; --danger: #f43f5e; }
+        * { box-sizing: border-box; cursor: crosshair; }
+        body { background-color: var(--bg); font-family: 'Inter', sans-serif; color: #f1f5f9; overflow: hidden; height: 100vh; width: 100vw; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        
+        /* Tactical Glass UI */
+        .glass-panel { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(56, 189, 248, 0.15); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .sidebar { scrollbar-width: none; -ms-overflow-style: none; }
+        .sidebar::-webkit-scrollbar { display: none; }
+
+        /* Animation Keyframes */
+        @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
+        @keyframes pulse-border { 0%, 100% { border-color: rgba(56, 189, 248, 0.2); } 50% { border-color: rgba(56, 189, 248, 0.6); } }
+        @keyframes flicker { 0% { opacity: 0.8; } 5% { opacity: 0.2; } 10% { opacity: 0.8; } 100% { opacity: 1; } }
+
+        .viewport { background: radial-gradient(circle at center, #111827 0%, #000000 100%); position: relative; overflow: hidden; }
+        .viewport::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: rgba(56, 189, 248, 0.1); animation: scanline 8s linear infinite; pointer-events: none; }
+        
+        .thriller-mode { animation: flicker 0.15s infinite; }
+        input[type="range"] { -webkit-appearance: none; background: #1e293b; height: 4px; border-radius: 2px; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: var(--accent); border-radius: 50%; cursor: pointer; }
+        
+        .tab-btn.active { border-bottom: 2px solid var(--accent); color: var(--accent); }
+    </style>
+</head>
+<body class="flex flex-col">
+
+    <nav class="h-12 border-b border-slate-800 flex items-center justify-between px-6 bg-slate-900/50">
+        <div class="flex items-center gap-4">
+            <span class="text-xs mono font-bold tracking-tighter text-sky-400">@ONLINE</span>
+            <div class="h-4 w-[1px] bg-slate-700"></div>
+            <span class="text-[10px] mono text-slate-500" id="clockDisplay">00:00:00:00</span>
+        </div>
+        <div class="flex gap-6 items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                <span class="text-[9px] mono uppercase text-emerald-500">System_Stabilized</span>
+            </div>
+            <button onclick="toggleFullscreen()" class="text-slate-500 hover:text-white transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
+            </button>
+        </div>
+    </nav>
+
+    <main class="flex-1 flex overflow-hidden">
+        
+        <aside class="w-80 sidebar glass-panel m-4 rounded-2xl flex flex-col overflow-y-auto p-6 space-y-8 z-30">
+            <div>
+                <h2 class="text-[10px] mono font-black text-slate-500 uppercase tracking-[0.3em] mb-4">Identity_Matrix</h2>
+                <div class="space-y-4">
+                    <div class="space-y-1">
+                        <label class="text-[9px] mono uppercase text-sky-400/70 ml-1">Brand_Name</label>
+                        <input type="text" id="brandIn" value="WE BUILD LOGO" class="w-full bg-black/40 border border-slate-700/50 p-3 rounded-lg mono text-sm outline-none focus:border-sky-500 transition-all">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[9px] mono uppercase text-sky-400/70 ml-1">Strategic_Tag</label>
+                        <input type="text" id="tagIn" value="FEEL_FREE_TO_MESSAGE_US" class="w-full bg-black/40 border border-slate-700/50 p-2 rounded-lg mono text-[10px] outline-none focus:border-sky-500 text-slate-400">
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-[10px] mono font-black text-slate-500 uppercase tracking-[0.3em] mb-4">Visual_Parameters</h2>
+                <div class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-[9px] mono uppercase text-slate-500">Primary_Glyph</label>
+                            <select id="glyphIn" class="w-full bg-black/40 border border-slate-700/50 p-2 rounded mono text-xs">
+                                <option value="❖">COMMAND</option>
+                                <option value="⧇">TERMINAL</option>
+                                <option value="◢">VECTOR</option>
+                                <option value="⦿">TARGET</option>
+                                <option value="⚡">ENERGY</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[9px] mono uppercase text-slate-500">Chroma_Key</label>
+                            <input type="color" id="colorIn" value="#38bdf8" class="w-full h-8 bg-transparent border-none cursor-pointer">
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-[9px] mono">
+                                <span>PARTICLE_DENSITY</span>
+                                <span id="densityVal" class="text-sky-400">150</span>
+                            </div>
+                            <input type="range" id="densityIn" min="0" max="500" value="150" class="w-full">
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-[9px] mono">
+                                <span>GLITCH_TURBULENCE</span>
+                                <span id="glitchVal" class="text-sky-400">0.2</span>
+                            </div>
+                            <input type="range" id="glitchIn" min="0" max="100" value="20" class="w-full">
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-[9px] mono">
+                                <span>OPTIC_STORM_SPEED</span>
+                                <span id="speedVal" class="text-sky-400">1.0</span>
+                            </div>
+                            <input type="range" id="speedIn" min="0" max="500" value="100" class="w-full">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4 space-y-3">
+                <button onclick="triggerThrillerEntrance()" class="w-full bg-sky-600 hover:bg-sky-500 text-white mono font-black text-[10px] py-4 rounded-xl transition-all shadow-lg shadow-sky-900/40 uppercase tracking-widest">
+                    Initialize_Production_Seq
+                </button>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="randomize()" class="bg-slate-800 hover:bg-slate-700 text-[9px] mono py-2 rounded uppercase">Random_Gen</button>
+                    <button onclick="toggleParticles()" id="partBtn" class="bg-emerald-900/30 text-emerald-500 text-[9px] mono py-2 rounded uppercase border border-emerald-500/20">FX: ACTIVE</button>
+                </div>
+            </div>
+
+            <div class="mt-auto border-t border-slate-800 pt-6">
+                <div class="bg-black/50 p-4 rounded-xl border border-slate-800/50">
+                    <p class="text-[9px] mono text-slate-500 leading-relaxed mb-4">
+                        <span class="text-sky-400 font-bold">PRO_TIP:</span> Recording this screen during the "Production_Seq" creates high-converting business ad content.
+                    </p>
+                    <button onclick="exportPackage()" class="w-full bg-slate-100 text-black mono font-bold text-[10px] py-2 rounded hover:bg-white uppercase">Download_Asset_Kit</button>
+                </div>
+            </div>
+        </aside>
+
+        <section class="flex-1 relative flex items-center justify-center viewport p-12">
+            
+            <div class="absolute inset-0 pointer-events-none p-12 flex flex-col justify-between z-20">
+                <div class="flex justify-between items-start">
+                    <div class="w-32 h-32 border-l-2 border-t-2 border-sky-500/30 rounded-tl-3xl"></div>
+                    <div class="text-right flex flex-col items-end gap-2">
+                        <div class="bg-red-600 px-3 py-1 mono text-[10px] font-black italic tracking-widest">RECORDING</div>
+                        <div class="text-sky-500 mono text-[9px] font-bold">FRAME_BUFFER: <span id="fps">60</span>FPS</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-center">
+                    <div id="thrillerText" class="opacity-0 transition-all duration-500 transform translate-y-4">
+                        <div class="bg-white text-black px-6 py-2 mono font-black text-sm uppercase tracking-[0.5em]">System_Override</div>
+                        <p class="text-[10px] mono text-white mt-2 tracking-widest uppercase">We Engineer Digital Dominance</p>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-end">
+                    <div class="mono text-[8px] text-slate-600">
+                        REL_X: <span id="coordX">0.00</span><br>
+                        REL_Y: <span id="coordY">0.00</span><br>
+                        STATE: DYNAMIC_RENDER
+                    </div>
+                    <div class="w-32 h-32 border-r-2 border-b-2 border-sky-500/30 rounded-br-3xl"></div>
+                </div>
+            </div>
+
+            <canvas id="renderCanvas"></canvas>
+        </section>
+    </main>
+
+    <footer class="h-8 bg-black border-t border-slate-800 flex items-center overflow-hidden">
+        <div class="whitespace-nowrap animate-marquee flex gap-12 text-[9px] mono font-bold text-slate-500 uppercase">
+            <span>Building Next-Gen Brand Identities</span>
+            <span>Tactical Logo Systems</span>
+            <span>Direct Message for Custom Business Engines</span>
+            <span>Procedural Asset Generation Active</span>
+            <span>Broadcasting Live to Global Network</span>
+        </div>
+    </footer>
+
+    <script>
+        /**
+         * GEN-7 TACTICAL ENGINE - SCRIPT CORE (Approx 350 Lines of Procedural Logic)
+         */
+        const canvas = document.getElementById('renderCanvas');
+        const ctx = canvas.getContext('2d');
+        const clock = document.getElementById('clockDisplay');
+        const fpsEl = document.getElementById('fps');
+        
+        // State Management
+        let particles = [];
+        let rippleParticles = [];
+        let particlesActive = true;
+        let isThriller = false;
+        let globalScale = 1;
+        let globalAlpha = 1;
+        let mouse = { x: 0, y: 0 };
+        
+        const inputs = {
+            brand: document.getElementById('brandIn'),
+            tag: document.getElementById('tagIn'),
+            glyph: document.getElementById('glyphIn'),
+            color: document.getElementById('colorIn'),
+            density: document.getElementById('densityIn'),
+            glitch: document.getElementById('glitchIn'),
+            speed: document.getElementById('speedIn')
+        };
+
+        // Resize Logic
+        function resize() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+        }
+        window.onresize = resize;
+        resize();
+
+        // Particle Class
+        class Particle {
+            constructor() {
+                this.init();
+            }
+            init() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.baseX = this.x;
+                this.baseY = this.y;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = (Math.random() - 0.5) * 2;
+                this.acc = Math.random() * 0.1 + 0.01;
+            }
+            update(speed) {
+                this.x += this.vx * (speed / 100);
+                this.y += this.vy * (speed / 100);
+
+                // Mouse Repulsion
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                if(dist < 100) {
+                    this.x -= dx / 10;
+                    this.y -= dy / 10;
+                }
+
+                if(this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if(this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            draw() {
+                ctx.fillStyle = inputs.color.value;
+                ctx.globalAlpha = 0.3;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Initialize Particles
+        function initParticles() {
+            particles = [];
+            const count = parseInt(inputs.density.value);
+            for(let i = 0; i < count; i++) particles.push(new Particle());
+        }
+        initParticles();
+        inputs.density.oninput = () => {
+            initParticles();
+            document.getElementById('densityVal').innerText = inputs.density.value;
+        };
+
+        // Thriller Sequence Controller
+        function triggerThrillerEntrance() {
+            if(isThriller) return;
+            isThriller = true;
+            globalScale = 0.1;
+            
+            const thrillerText = document.getElementById('thrillerText');
+            thrillerText.style.opacity = '1';
+            thrillerText.classList.remove('translate-y-4');
+            
+            // Animation Loop
+            let start = Date.now();
+            const duration = 2000;
+
+            const animate = () => {
+                let now = Date.now();
+                let elapsed = now - start;
+                let progress = elapsed / duration;
+
+                if (progress < 1) {
+                    globalScale = progress * 1.2;
+                    if(progress > 0.8) globalScale = 1;
+                    requestAnimationFrame(animate);
+                } else {
+                    isThriller = false;
+                    setTimeout(() => {
+                        thrillerText.style.opacity = '0';
+                        thrillerText.classList.add('translate-y-4');
+                    }, 2000);
+                }
+            };
+            animate();
+        }
+
+        // The Render Loop (The "Heart")
+        let lastTime = 0;
+        function mainLoop(time) {
+            const dt = time - lastTime;
+            lastTime = time;
+            
+            // Background Clearing
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Update HUD
+            const now = new Date();
+            clock.innerText = `${now.getHours().toString().padStart(2,'0')}:${now.getUTCMinutes()}:${now.getUTCSeconds()}:${Math.floor(now.getMilliseconds()/10)}`;
+            fpsEl.innerText = Math.round(1000/dt) || 60;
+            
+            const intensity = inputs.glitch.value / 100;
+            const speed = inputs.speed.value;
+
+            // Draw Particles
+            if(particlesActive) {
+                particles.forEach(p => {
+                    p.update(speed);
+                    p.draw();
+                });
+            }
+
+            // Central Branding Logic
+            ctx.save();
+            ctx.translate(canvas.width/2, canvas.height/2);
+            ctx.scale(globalScale, globalScale);
+
+            const isGlitchFrame = Math.random() < (intensity * 0.15);
+            const glitchOffset = isGlitchFrame ? (Math.random() - 0.5) * 60 : 0;
+
+            const drawBranding = (off = 0, color = null) => {
+                ctx.save();
+                ctx.translate(off, 0);
+                
+                // Optic Glow
+                if(!color) {
+                    ctx.shadowBlur = 40 * intensity;
+                    ctx.shadowColor = inputs.color.value;
+                }
+
+                // Glyph
+                ctx.fillStyle = color || inputs.color.value;
+                ctx.font = '900 220px "Inter"';
+                ctx.textAlign = 'center';
+                ctx.fillText(inputs.glyph.value, 0, -60);
+
+                // Brand
+                ctx.fillStyle = color || '#ffffff';
+                ctx.font = '900 130px "Inter"';
+                ctx.letterSpacing = "-10px";
+                ctx.fillText(inputs.brand.value.toUpperCase(), 0, 70);
+
+                // Tagline
+                ctx.fillStyle = color || '#64748b';
+                ctx.font = '800 20px "JetBrains Mono"';
+                ctx.letterSpacing = "18px";
+                ctx.fillText(inputs.tag.value.toUpperCase(), 0, 130);
+
+                // Underline Detail
+                ctx.fillStyle = color || inputs.color.value;
+                ctx.globalAlpha = 0.5;
+                ctx.fillRect(-150, 150, 300, 2);
+                
+                ctx.restore();
+            };
+
+            // RGB Split Glitch Effect
+            if(isGlitchFrame || isThriller) {
+                ctx.globalAlpha = 0.5;
+                drawBranding(-20 * intensity, '#f43f5e');
+                drawBranding(20 * intensity, '#10b981');
+                ctx.globalAlpha = 1.0;
+            }
+
+            drawBranding(glitchOffset);
+            ctx.restore();
+
+            requestAnimationFrame(mainLoop);
+        }
+
+        // UI Action Handlers
+        function randomize() {
+            const colors = ['#38bdf8', '#f43f5e', '#10b981', '#fbbf24', '#818cf8', '#ffffff'];
+            const glyphs = ['❖', '⧇', '◢', '⦿', '⚡', '✚'];
+            inputs.color.value = colors[Math.floor(Math.random() * colors.length)];
+            inputs.glyph.value = glyphs[Math.floor(Math.random() * glyphs.length)];
+            inputs.glitch.value = Math.random() * 50;
+            triggerThrillerEntrance();
+        }
+
+        function toggleParticles() {
+            particlesActive = !particlesActive;
+            document.getElementById('partBtn').innerText = particlesActive ? "FX: ACTIVE" : "FX: DISABLED";
+        }
+
+        function exportPackage() {
+            const link = document.createElement('a');
+            link.download = `GEN7_ASSET_${inputs.brand.value}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+            alert("BUSINESS ASSET KIT GENERATED. PNG EXPORT COMPLETE.");
+        }
+
+        // Mouse Tracking
+        canvas.onmousemove = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+            document.getElementById('coordX').innerText = (mouse.x / canvas.width).toFixed(2);
+            document.getElementById('coordY').innerText = (mouse.y / canvas.height).toFixed(2);
+        };
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+            else document.exitFullscreen();
+        }
+
+        // Start Logic
+        window.onload = () => {
+            requestAnimationFrame(mainLoop);
+            triggerThrillerEntrance();
+        };
+    </script>
+</body>
+</html>
