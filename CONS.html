@@ -119,6 +119,13 @@
             width: 0%; transition: 0.3s; z-index: 10;
         }
 
+        .audio-toggle {
+            background: none; border: 1px solid var(--neon); color: var(--neon);
+            padding: 4px 8px; font-family: 'Orbitron'; font-size: 0.55rem; cursor: pointer;
+            margin-right: 5px; transition: 0.3s;
+        }
+        .audio-toggle:hover { background: var(--neon); color: #000; }
+
         @media (max-width: 900px) {
             .sidebar { position: fixed; left: -100%; top: 0; bottom: 0; z-index: 1000; width: 85%; }
             .sidebar.active { left: 0; }
@@ -132,6 +139,7 @@
 <body>
 
     <audio id="sfx-click"><source src="https://rpg.hamsterrepublic.com/ohrrpgce/sounds/click.wav" type="audio/mpeg"></audio>
+    <audio id="bg-music" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></audio>
 
     <div class="neural-net"><div class="grid"></div></div>
 
@@ -140,7 +148,7 @@
         <div id="lightning-container" style="position:absolute; inset:0; pointer-events:none;"></div>
         
         <div class="lock-btn" onclick="triggerLightning();">
-            <img id="logo-img" src="5FC6C77A-BAD0-4FFA-B908-DBEA57CFCB03.png" style="width:100px; filter: drop-shadow(0 0 10px var(--neon));">
+            <img id="logo-img" src="5FC6C77A-BAD0-4FFA-B908-DBEA57CFCB03.png" style="width:100px; filter: drop-shadow(0 0 10px var(--neon));" alt="LOGO">
         </div>
         <p style="margin-top:40px; font-family:'Orbitron'; color:var(--neon); letter-spacing:5px; font-size:0.7rem; z-index:2;">PROJECT_ACCESS_PORTAL_SAMPLES</p>
     </div>
@@ -163,7 +171,10 @@
                 <button class="mobile-menu-btn" onclick="toggleMenu()">MENU</button>
                 <div style="font-size:0.6rem; color:#555">ACTIVE_NODE: <span id="node-name" style="color:var(--neon)">---</span></div>
                 <div id="timer" style="font-family:'Orbitron'; color:var(--neon); font-size:1.1rem;">00:00</div>
-                <button onclick="location.reload()" style="background:none; border:1px solid var(--danger); color:var(--danger); padding:4px 10px; font-family:'Orbitron'; font-size:0.55rem;">RESET</button>
+                <div style="display: flex;">
+                    <button id="mute-btn" class="audio-toggle" onclick="toggleMusic()">MUSIC: ON</button>
+                    <button onclick="location.reload()" style="background:none; border:1px solid var(--danger); color:var(--danger); padding:4px 10px; font-family:'Orbitron'; font-size:0.55rem;">RESET</button>
+                </div>
             </header>
 
             <div class="kpi-row">
@@ -187,7 +198,7 @@
             { title: "GCash & E-Load", link: "https://script.google.com/macros/s/AKfycbwfZDpTxL4IgOqzK7X87XuNopCd7UpgaGRmkAnQ7gQu7JZkQrdalTndrn7J4BQZMVb7/exec", icon: "bi-people", color: "var(--warning)" },
             { title: "Water Order", link: "https://aquapure.web247.online/Order", icon: "bi-building", color: "var(--primary)" },
             { title: "Water Admin", link: "https://aquapure.web247.online/Admin", icon: "bi-building", color: "var(--info)" },
-            { title: "Recruitment System", link: "Screenshot 2026-03-07 122601.png", color: "var(--success)" },
+            { title: "Recruitment System", link: "Screenshot 2026-03-07 122601.png", icon: "bi-person-workspace", color: "var(--success)" },
             { title: "Resto Bars & Cafe", link: "https://bondat.web247.online/Dash", icon: "bi-person-badge", color: "var(--warning)" },
             { title: "Resto Admin", link: "https://bondat.web247.online/admin", icon: "bi-droplet-half", color: "var(--danger)" },
             { title: "Barbershop App", link: "https://www.facebook.com/share/v/1B8GHYGgDb/", icon: "bi-people", color: "var(--secondary)" },
@@ -209,7 +220,27 @@
             { title: "Barangay Info", link: "https://buenlag2nd.web247.online/Buenlag2nd#", icon: "bi-person-vcard", color: "var(--secondary)" }
         ];
 
+        let musicPlaying = true;
+        const bgMusic = document.getElementById('bg-music');
+        bgMusic.volume = 0.3; // Gentle background volume
+
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
+
+        function toggleMusic() {
+            const btn = document.getElementById('mute-btn');
+            if (musicPlaying) {
+                bgMusic.pause();
+                btn.innerText = "MUSIC: OFF";
+                btn.style.borderColor = "var(--danger)";
+                btn.style.color = "var(--danger)";
+            } else {
+                bgMusic.play();
+                btn.innerText = "MUSIC: ON";
+                btn.style.borderColor = "var(--neon)";
+                btn.style.color = "var(--neon)";
+            }
+            musicPlaying = !musicPlaying;
+        }
 
         function triggerLightning() {
             const gate = document.getElementById('gate');
@@ -241,6 +272,9 @@
         }
 
         function unlock() {
+            // Start the corporate inspo music on successful entry
+            bgMusic.play().catch(e => console.log("Music blocked until interaction"));
+            
             document.getElementById('gate').classList.add('gate-off');
             document.getElementById('rev').innerText = "$921,084.10";
             loadNode(0);
