@@ -9,15 +9,15 @@
     <link rel="apple-touch-icon" href="pos.png.png">
 
     <style>
-        /* Full View Setup */
+        /* --- Base Setup --- */
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
             width: 100%;
             overflow: hidden;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #1a1a1a; /* Dark background for a sleek look */
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: #121212; /* Darker base for smoother transitions */
         }
 
         .pos-wrapper {
@@ -27,56 +27,74 @@
             width: 100vw;
         }
 
-        /* Top Navigation Bar */
+        /* --- Entrance Animations --- */
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes logoPulse {
+            0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+        }
+
+        /* --- Styled Components --- */
         .navbar {
             background-color: #2c3e50;
             color: #ecf0f1;
-            padding: 8px 15px;
+            padding: 10px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 2px solid #34495e;
+            border-bottom: 3px solid #27ae60;
+            z-index: 100;
+            /* Animation */
+            animation: slideDown 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
         }
 
         .brand {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
         }
 
         .brand img {
-            width: 32px;
-            height: 32px;
+            width: 40px;
+            height: 40px;
             object-fit: contain;
-            border-radius: 5px;
-            background: white; /* Makes the logo pop if it has transparency */
+            border-radius: 8px;
+            background: white;
+            /* Animations */
+            animation: popIn 0.8s 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both, 
+                       logoPulse 2s infinite;
         }
 
         .brand span {
-            font-weight: 700;
-            font-size: 1.1rem;
-            letter-spacing: 0.5px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        .controls button {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: background 0.2s;
-        }
-
-        .controls button:hover {
-            background: #2ecc71;
-        }
-
-        /* The POS Frame */
+        /* --- The Main Frame --- */
         .iframe-container {
             flex-grow: 1;
             position: relative;
+            background: #fff;
+            /* Animation: Delayed start so the header loads first */
+            animation: fadeInUp 0.8s 0.5s cubic-bezier(0.215, 0.61, 0.355, 1) both;
         }
 
         iframe {
@@ -87,6 +105,29 @@
             height: 100%;
             border: none;
         }
+
+        /* --- Buttons --- */
+        .controls button {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .controls button:hover {
+            background: #2ecc71;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        .controls button:active {
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
@@ -94,26 +135,24 @@
     <div class="pos-wrapper">
         <nav class="navbar">
             <div class="brand">
-                <img src="pos.png.png" alt="Store Logo">
-                <span>SARI-SARI STORE POS</span>
+                <img src="pos.png.png" alt="Logo">
+                <span>Sari-Sari Store POS</span>
             </div>
             <div class="controls">
-                <button onclick="toggleFullScreen()">Toggle Full Screen</button>
-                <button onclick="location.reload()" style="background:#7f8c8d; margin-left:5px;">Refresh</button>
+                <button onclick="toggleFullScreen()">⛶ Full Screen</button>
+                <button onclick="location.reload()" style="background:#34495e; margin-left:8px;">↻ Refresh</button>
             </div>
         </nav>
 
         <div class="iframe-container">
             <iframe 
                 src="https://script.google.com/macros/s/AKfycbzM_8yPXPD4i4eIXb_ZOxSsWOvVsDWJMmmwaGEjH044tIktwm6SIc5zO_dj7vhyC7o3/exec" 
-                allow="camera; geolocation; microphone; display-capture"
-                loading="lazy">
+                allow="camera; geolocation; microphone; display-capture">
             </iframe>
         </div>
     </div>
 
     <script>
-        // Full Screen Toggle Function
         function toggleFullScreen() {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen();
