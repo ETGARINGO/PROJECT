@@ -11,7 +11,8 @@
         body, html {
             margin: 0; padding: 0; height: 100%; width: 100%;
             overflow: hidden; background-color: #000;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', sans-serif;
+            perspective: 1000px; /* Enables 3D zoom depth */
         }
 
         /* Lightning Flash Layer */
@@ -20,81 +21,77 @@
             background: #fff; opacity: 0; z-index: 1000; pointer-events: none;
         }
 
-        /* Full Screen Logo View */
+        /* Loader Wrapper */
         #loader {
             position: fixed; z-index: 999; top: 0; left: 0; 
             width: 100%; height: 100%; background: #000;
             display: flex; flex-direction: column; 
             justify-content: center; align-items: center;
-            transition: transform 0.5s cubic-bezier(0.95, 0.05, 0.795, 0.035);
+            transition: all 0.6s cubic-bezier(0.6, -0.28, 0.735, 0.045);
         }
 
+        /* The Zooming PNG */
         #loader img {
-            max-width: 80%; /* Large View */
-            max-height: 60vh;
+            width: 85%;
+            max-width: 500px;
             object-fit: contain;
-            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+            transform: translateZ(0);
+            transition: transform 0.6s cubic-bezier(0.6, -0.28, 0.735, 0.045), filter 0.3s;
+        }
+
+        /* Loading Animation */
+        .pulse {
             animation: breathe 3s infinite ease-in-out;
-            cursor: pointer;
         }
 
-        /* Instruction Text */
-        .tap-text {
-            color: white;
-            margin-top: 30px;
-            font-size: 14px;
-            letter-spacing: 5px;
-            opacity: 0.6;
-            animation: blink 1.5s infinite;
+        /* Text Styling */
+        .instruction {
+            color: #555;
+            margin-top: 40px;
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
         }
 
-        /* POS Container Hidden initially */
+        /* POS Container */
         .pos-container {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0; visibility: hidden;
+            opacity: 0; transform: scale(0.8);
+            visibility: hidden;
         }
 
         .pos-container.active {
             opacity: 1; visibility: visible;
-            animation: reveal 0.8s ease-out;
+            transform: scale(1);
+            transition: opacity 0.5s ease-out, transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* Animations */
+        /* Keyframes */
         @keyframes breathe {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255,255,255,0.1)); }
-            50% { transform: scale(1.05); filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.4)); }
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.03); opacity: 1; }
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 0.1; }
-            50% { opacity: 0.8; }
-        }
-
-        @keyframes lightning-strike {
+        @keyframes strike {
             0% { opacity: 0; }
-            10% { opacity: 1; }
-            15% { opacity: 0.4; }
-            20% { opacity: 1; }
+            5% { opacity: 1; }
+            10% { opacity: 0.2; }
+            15% { opacity: 1; }
             100% { opacity: 0; }
-        }
-
-        @keyframes reveal {
-            0% { transform: scale(1.2); filter: brightness(5); }
-            100% { transform: scale(1); filter: brightness(1); }
         }
     </style>
 </head>
-<body onclick="initiateStrike()">
+<body onclick="launchSystem()">
 
     <audio id="thunder" src="https://www.soundjay.com/nature/sounds/thunder-crack-1.mp3"></audio>
-
     <div id="flash"></div>
 
     <div id="loader">
-        <img src="pos.png" alt="POS Logo">
-        <div class="tap-text">TAP TO ENTER SYSTEM</div>
+        <img src="pos.png" id="logo" class="pulse" alt="POS Logo">
+        <div class="instruction" id="hint">Initializing...</div>
     </div>
 
     <div id="posWrapper" class="pos-container">
@@ -106,39 +103,42 @@
     </div>
 
     <script>
-        let isLoaded = false;
         const frame = document.getElementById('posFrame');
-        const tapText = document.querySelector('.tap-text');
+        const hint = document.getElementById('hint');
+        const logo = document.getElementById('logo');
+        let ready = false;
 
-        // Check when the POS is ready in the background
-        frame.onload = function() {
-            isLoaded = true;
-            tapText.innerText = "SYSTEM READY";
-            tapText.style.color = "#00ff88";
+        frame.onload = () => {
+            ready = true;
+            hint.innerText = "Click to Enter Store";
+            hint.style.color = "#00ffcc";
         };
 
-        function initiateStrike() {
-            // Only allow strike if the POS is ready or give it a second
+        function launchSystem() {
+            if (!ready) return; // Prevent clicking before iframe loads
+
             const flash = document.getElementById('flash');
             const loader = document.getElementById('loader');
             const wrapper = document.getElementById('posWrapper');
             const audio = document.getElementById('thunder');
 
-            // 1. Fire Thunder Sound
-            audio.play().catch(e => console.log("Sound played"));
+            // 1. Play Sound
+            audio.play();
 
-            // 2. Visual Lightning Flash
-            flash.style.animation = "lightning-strike 0.5s ease-out forwards";
+            // 2. Visual Strike
+            flash.style.animation = "strike 0.5s ease-out forwards";
 
-            // 3. Transform the Loader (Zoom in/out effect)
-            loader.style.transform = "scale(2)";
+            // 3. THE ZOOM: Logo flies toward user
+            logo.style.transform = "scale(10) translateZ(500px)";
+            logo.style.filter = "brightness(10) blur(5px)";
+            loader.style.backgroundColor = "transparent";
             loader.style.opacity = "0";
 
-            // 4. Reveal the POS
+            // 4. Reveal POS with a "bounce" reveal
             setTimeout(() => {
                 loader.style.display = 'none';
                 wrapper.classList.add('active');
-            }, 200);
+            }, 300);
         }
     </script>
 </body>
