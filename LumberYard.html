@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Timber Exchange | Artisan Portal</title>
+
+    <link rel="icon" type="image/png" href="LumberYard Trading POS.png">
+    <link rel="apple-touch-icon" href="LumberYard Trading POS.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:ital,wght@1,600&family=Space+Grotesk:wght@300;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --deep-walnut: #1a1614;
+            --brushed-gold: #c5a059;
+            --ivory-glass: rgba(251, 251, 248, 0.07);
+            --text-light: #f4e8d1;
+            --border-gold: rgba(197, 160, 89, 0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body, html { 
+            height: 100%; 
+            background: var(--deep-walnut); 
+            font-family: 'Space Grotesk', sans-serif;
+            overflow: hidden;
+            perspective: 2000px;
+        }
+
+        /* --- THE ARTISAN SHOWROOM --- */
+        #loading-theater {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: radial-gradient(circle at center, #2c2621 0%, #1a1614 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 1.8s cubic-bezier(0.85, 0, 0.15, 1);
+        }
+
+        /* Glass Header */
+        #top-header {
+            position: absolute;
+            top: 5%;
+            width: 80%;
+            height: 60px;
+            background: var(--ivory-glass);
+            backdrop-filter: blur(15px);
+            border-radius: 50px;
+            border: 1px solid var(--border-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeInDown 1s forwards 0.5s;
+        }
+
+        /* Timber Frame System */
+        #timber-frame-system {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-style: preserve-3d;
+            transition: transform 1.5s ease-in-out;
+        }
+
+        .timber-plank {
+            position: absolute;
+            background: linear-gradient(90deg, #3d2b1f, #5d4037);
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--brushed-gold);
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .gold-icon {
+            font-size: 1.2rem;
+            margin: 0 15px;
+            filter: drop-shadow(0 0 5px var(--brushed-gold));
+        }
+
+        #brand-reveal {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .main-title {
+            font-family: 'Cinzel', serif;
+            color: var(--text-light);
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            letter-spacing: 15px;
+            margin-bottom: 10px;
+        }
+
+        .curating-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            color: var(--brushed-gold);
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+        }
+
+        /* --- THE FULL VIEW NAV BAR --- */
+        #portal-nav {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            z-index: 10000;
+            background: rgba(26, 22, 20, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-gold);
+            padding: 12px 30px;
+            border-radius: 100px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1) 4s;
+        }
+
+        .nav-btn {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: 0.3s;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .nav-btn:hover { color: var(--brushed-gold); }
+
+        /* --- LOADING STATES --- */
+        .system-complete #loading-theater {
+            transform: scale(1.2);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .system-complete #portal-nav {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Plank Disperse Animation */
+        .system-complete .timber-plank.top { transform: translateY(-500px) rotate(10deg); }
+        .system-complete .timber-plank.bottom { transform: translateY(500px) rotate(-10deg); }
+        .system-complete .timber-plank.side { transform: translateX(-600px); }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #main-stage { position: absolute; inset: 0; z-index: 1; }
+        iframe { width: 100%; height: 100%; border: none; }
+    </style>
+</head>
+<body>
+
+    <div id="loading-theater">
+        <div id="top-header">
+            <span style="color: var(--text-light); font-size: 0.6rem; letter-spacing: 5px; text-transform: uppercase;">
+                Lumber Exchange | Industrial Logistics Portal
+            </span>
+        </div>
+
+        <div id="timber-frame-system">
+            <div class="timber-plank top" style="width: 550px; height: 50px; top: -80px;">
+                <span class="gold-icon">📏</span> CURATING EXCELLENCE
+            </div>
+
+            <div class="timber-plank bottom" style="width: 550px; height: 50px; bottom: -80px;">
+                MEASURED QUALITY <span class="gold-icon">🔘</span>
+            </div>
+
+            <div class="timber-plank side" style="width: 45px; height: 350px; left: -320px; writing-mode: vertical-rl;">
+                <span class="gold-icon">⛓</span>
+            </div>
+
+            <div id="brand-reveal">
+                <h1 class="main-title">LUMBER X</h1>
+                <p class="curating-text">Premium Hardwood Inventory</p>
+                <div style="margin-top: 30px; width: 120px; height: 1px; background: var(--brushed-gold); display: inline-block;"></div>
+            </div>
+        </div>
+    </div>
+
+    <nav id="portal-nav">
+        <span style="color: var(--brushed-gold); font-size: 0.6rem; letter-spacing: 1px;">PORTAL LIVE</span>
+        <div style="width: 1px; height: 15px; background: var(--border-gold);"></div>
+        <button onclick="toggleFullScreen()" class="nav-btn">Full Screen</button>
+        <div style="width: 1px; height: 15px; background: var(--border-gold);"></div>
+    </nav>
+
+    <div id="main-stage">
+        <iframe 
+            id="app-frame"
+            src="https://script.google.com/macros/s/AKfycbw7tdwBmL5jdHdXYwlzaYTwmHT8pwPGxZbX0YvV91WUPWNPN7XlZ2f9yg44SV7RdI3r3w/exec" 
+            allow="fullscreen; clipboard-read; clipboard-write">
+        </iframe>
+    </div>
+
+    <script>
+        // Reveal Logic
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.body.classList.add('system-complete');
+                setTimeout(() => {
+                    document.getElementById('loading-theater').remove();
+                }, 2000);
+            }, 4000); 
+        });
+
+        // Fullscreen Toggle Logic
+        function toggleFullScreen() {
+            const doc = window.document;
+            const docEl = doc.documentElement;
+
+            const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+            const cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+            if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+                requestFullScreen.call(docEl);
+            } else {
+                cancelFullScreen.call(doc);
+            }
+        }
+    </script>
+</body>
+</html>
