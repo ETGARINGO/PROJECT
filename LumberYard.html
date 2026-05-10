@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Timber Exchange | Artisan Portal</title>
-
     <link rel="icon" type="image/png" href="LumberYard Trading POS.png">
     <link rel="apple-touch-icon" href="LumberYard Trading POS.png">
-
+    <title>Global Timber Exchange | Artisan Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:ital,wght@1,600&family=Space+Grotesk:wght@300;500&display=swap" rel="stylesheet">
     
     <style>
@@ -113,14 +111,24 @@
             letter-spacing: 2px;
         }
 
-        /* --- THE FULL VIEW NAV BAR --- */
+        /* --- AUTO-HIDE NAV BAR LOGIC --- */
+        #nav-trigger-zone {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px; /* Area that triggers the reveal */
+            z-index: 9999;
+            display: none; /* Hidden until site loads */
+        }
+
         #portal-nav {
             position: fixed;
-            bottom: 30px;
+            bottom: 25px;
             left: 50%;
-            transform: translateX(-50%) translateY(100px);
+            transform: translateX(-50%) translateY(120px); /* Hidden position */
             z-index: 10000;
-            background: rgba(26, 22, 20, 0.85);
+            background: rgba(26, 22, 20, 0.9);
             backdrop-filter: blur(20px);
             border: 1px solid var(--border-gold);
             padding: 12px 30px;
@@ -128,7 +136,17 @@
             display: flex;
             gap: 20px;
             align-items: center;
-            transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1) 4s;
+            transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.4s;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Show when hovering near bottom OR hovering the nav itself */
+        #nav-trigger-zone:hover + #portal-nav,
+        #portal-nav:hover {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            pointer-events: all;
         }
 
         .nav-btn {
@@ -142,6 +160,7 @@
             cursor: pointer;
             background: none;
             border: none;
+            white-space: nowrap;
         }
 
         .nav-btn:hover { color: var(--brushed-gold); }
@@ -153,8 +172,9 @@
             pointer-events: none;
         }
 
-        .system-complete #portal-nav {
-            transform: translateX(-50%) translateY(0);
+        /* Activate trigger zone after loading */
+        .system-complete #nav-trigger-zone {
+            display: block;
         }
 
         /* Plank Disperse Animation */
@@ -201,11 +221,15 @@
         </div>
     </div>
 
+    <!-- Hidden zone that detects mouse for auto-hide -->
+    <div id="nav-trigger-zone"></div>
+
     <nav id="portal-nav">
         <span style="color: var(--brushed-gold); font-size: 0.6rem; letter-spacing: 1px;">PORTAL LIVE</span>
         <div style="width: 1px; height: 15px; background: var(--border-gold);"></div>
         <button onclick="toggleFullScreen()" class="nav-btn">Full Screen</button>
         <div style="width: 1px; height: 15px; background: var(--border-gold);"></div>
+        <span style="color: var(--text-light); font-size: 0.5rem; opacity: 0.5;">HOVER BOTTOM TO REVEAL</span>
     </nav>
 
     <div id="main-stage">
@@ -221,6 +245,18 @@
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.body.classList.add('system-complete');
+                
+                // Temporary hint: Show nav for a second so user knows it exists
+                const nav = document.getElementById('portal-nav');
+                setTimeout(() => {
+                    nav.style.transform = "translateX(-50%) translateY(0)";
+                    nav.style.opacity = "1";
+                    setTimeout(() => {
+                        nav.style.transform = ""; // Return to CSS control
+                        nav.style.opacity = "";
+                    }, 2000);
+                }, 1000);
+
                 setTimeout(() => {
                     document.getElementById('loading-theater').remove();
                 }, 2000);
