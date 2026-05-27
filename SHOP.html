@@ -5,15 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Motorshop POS</title>
     
-    <link rel="icon" type="MOTORL.png" href="MOTORL.png">
+    <link rel="icon" type="image/png" href="MOTORL.png">
     <link rel="apple-touch-icon" href="MOTORL.png">
 
     <style>
         body, html {
             margin: 0; padding: 0; height: 100%; width: 100%;
-            overflow: hidden; background-color: #000;
+            overflow: hidden; background-color: #050505;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             perspective: 2000px;
+        }
+
+        /* Subtle Cyber Scanline Overlay for Tactical Finish */
+        body::after {
+            content: " ";
+            display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 255, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 9999; background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
         }
 
         /* High-Voltage Flash */
@@ -35,53 +44,53 @@
         /* Logo with Nitro Glow Pulse */
         #logo {
             width: 80%; max-width: 450px;
-            filter: drop-shadow(0 0 20px rgba(255, 51, 51, 0.3));
+            filter: drop-shadow(0 0 20px rgba(255, 51, 51, 0.35));
             will-change: transform, filter;
-            transition: transform 0.25s cubic-bezier(0.4, 0, 1, 1), filter 0.2s;
+            transition: transform 0.28s cubic-bezier(0.4, 0, 1, 1), filter 0.2s;
             animation: breathe 2s infinite ease-in-out;
         }
 
         /* READY Status Glow - Motorsport Styling */
         .status {
-            color: #444; margin-top: 40px; letter-spacing: 6px;
+            color: #222; margin-top: 40px; letter-spacing: 6px;
             font-size: 11px; font-weight: 900; font-style: italic; text-transform: uppercase;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
         }
 
         /* POS Container Entrance */
         .pos-container {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0; transform: scale(1.1); visibility: hidden;
+            opacity: 0; transform: scale(1.08) translateZ(0); visibility: hidden;
             will-change: transform, opacity;
         }
 
         .pos-container.active {
-            opacity: 1; visibility: visible; transform: scale(1);
+            opacity: 1; visibility: visible; transform: scale(1) translateZ(0);
             transition: opacity 0.15s ease-out, transform 0.25s cubic-bezier(0.1, 0.9, 0.2, 1);
             animation: impact-shake 0.3s ease-out;
         }
 
-        iframe { width: 100%; height: 100%; border: none; }
+        iframe { width: 100%; height: 100%; border: none; background-color: #000; }
 
         /* Keyframes */
         @keyframes breathe {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255, 51, 51, 0.2)); }
-            50% { transform: scale(1.02); filter: drop-shadow(0 0 30px rgba(255, 51, 51, 0.6)); }
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 12px rgba(255, 51, 51, 0.25)); }
+            50% { transform: scale(1.03); filter: drop-shadow(0 0 32px rgba(255, 51, 51, 0.65)); }
         }
 
         @keyframes strike-anim {
             0% { opacity: 0; }
             10% { opacity: 1; background: #fff; }
-            20% { opacity: 0.7; background: #ff3333; } /* Nitro Red tint mid-strike */
+            20% { opacity: 0.75; background: #ff2222; } /* Nitro Ignition Tint */
             30% { opacity: 1; background: #fff; }
             100% { opacity: 0; }
         }
 
         @keyframes impact-shake {
-            0% { transform: translate(0,0) scale(1.2); filter: brightness(5); }
-            10% { transform: translate(-10px, 10px); }
-            30% { transform: translate(10px, -10px); }
-            50% { transform: translate(-5px, 5px); }
+            0% { transform: translate(0,0) scale(1.15); filter: brightness(4); }
+            10% { transform: translate(-8px, 6px); }
+            30% { transform: translate(8px, -6px); }
+            50% { transform: translate(-4px, 3px); }
             100% { transform: translate(0,0) scale(1); filter: brightness(1); }
         }
     </style>
@@ -94,7 +103,7 @@
 
     <!-- Splash Loader Section -->
     <div id="loader" onclick="launchPOS()">
-        <img src="MOTORL.png id="logo" alt="Motorshop Logo">
+        <img src="MOTORL.png" id="logo" alt="Motorshop Logo">
         <div class="status" id="txt">IGNITING SYSTEM...</div>
     </div>
 
@@ -124,7 +133,7 @@
             txt.innerText = "TAP TO START ENGINE";
             txt.style.color = "#ff3333";
             txt.style.opacity = "1";
-            txt.style.textShadow = "0 0 10px rgba(255,51,51,0.8)";
+            txt.style.textShadow = "0 0 12px rgba(255,51,51,0.85)";
         };
 
         function launchPOS() {
@@ -137,8 +146,8 @@
             flash.style.animation = "strike-anim 0.35s forwards";
             
             // Warp Zoom Transition
-            logo.style.transform = "scale(20) translateZ(500px)";
-            logo.style.filter = "brightness(10) blur(30px)";
+            logo.style.transform = "scale(22) translateZ(600px)";
+            logo.style.filter = "brightness(12) blur(25px)";
             
             // Hot-swap interface during the peak luminance frame
             setTimeout(() => {
