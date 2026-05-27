@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Motorshop POS</title>
+    
+    <link rel="icon" type="MOTORL.png" href="MOTORL.png">
+    <link rel="apple-touch-icon" href="MOTORL.png">
+
+    <style>
+        body, html {
+            margin: 0; padding: 0; height: 100%; width: 100%;
+            overflow: hidden; background-color: #000;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            perspective: 2000px;
+        }
+
+        /* High-Voltage Flash */
+        #flash {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; opacity: 0; z-index: 1000; pointer-events: none;
+        }
+
+        /* Splash Screen */
+        #loader {
+            position: fixed; z-index: 999; top: 0; left: 0; 
+            width: 100%; height: 100%; background: #000;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        /* Logo with Nitro Glow Pulse */
+        #logo {
+            width: 80%; max-width: 450px;
+            filter: drop-shadow(0 0 20px rgba(255, 51, 51, 0.3));
+            will-change: transform, filter;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 1, 1), filter 0.2s;
+            animation: breathe 2s infinite ease-in-out;
+        }
+
+        /* READY Status Glow - Motorsport Styling */
+        .status {
+            color: #444; margin-top: 40px; letter-spacing: 6px;
+            font-size: 11px; font-weight: 900; font-style: italic; text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        /* POS Container Entrance */
+        .pos-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0; transform: scale(1.1); visibility: hidden;
+            will-change: transform, opacity;
+        }
+
+        .pos-container.active {
+            opacity: 1; visibility: visible; transform: scale(1);
+            transition: opacity 0.15s ease-out, transform 0.25s cubic-bezier(0.1, 0.9, 0.2, 1);
+            animation: impact-shake 0.3s ease-out;
+        }
+
+        iframe { width: 100%; height: 100%; border: none; }
+
+        /* Keyframes */
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255, 51, 51, 0.2)); }
+            50% { transform: scale(1.02); filter: drop-shadow(0 0 30px rgba(255, 51, 51, 0.6)); }
+        }
+
+        @keyframes strike-anim {
+            0% { opacity: 0; }
+            10% { opacity: 1; background: #fff; }
+            20% { opacity: 0.7; background: #ff3333; } /* Nitro Red tint mid-strike */
+            30% { opacity: 1; background: #fff; }
+            100% { opacity: 0; }
+        }
+
+        @keyframes impact-shake {
+            0% { transform: translate(0,0) scale(1.2); filter: brightness(5); }
+            10% { transform: translate(-10px, 10px); }
+            30% { transform: translate(10px, -10px); }
+            50% { transform: translate(-5px, 5px); }
+            100% { transform: translate(0,0) scale(1); filter: brightness(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="thunderSfx" src="https://www.soundjay.com/nature/sounds/thunder-crack-1.mp3" preload="auto"></audio>
+    
+    <div id="flash"></div>
+
+    <!-- Splash Loader Section -->
+    <div id="loader" onclick="launchPOS()">
+        <img src="MOTORL.png id="logo" alt="Motorshop Logo">
+        <div class="status" id="txt">IGNITING SYSTEM...</div>
+    </div>
+
+    <!-- Live POS System Frame -->
+    <div id="posWrapper" class="pos-container">
+        <iframe 
+            id="posFrame"
+            src="https://script.google.com/macros/s/AKfycbxdnfAdkAh_8nd3VJhwgg8XqMfLyyfqicrdpRqAmxVK-PhEBrbEuS0Umial05YNKcWL/exec?page=casher" 
+            allow="camera; geolocation; microphone">
+        </iframe>
+    </div>
+
+    <script>
+        const audio = document.getElementById('thunderSfx');
+        const logo = document.getElementById('logo');
+        const flash = document.getElementById('flash');
+        const loader = document.getElementById('loader');
+        const wrapper = document.getElementById('posWrapper');
+        const frame = document.getElementById('posFrame');
+        const txt = document.getElementById('txt');
+
+        let isReady = false;
+
+        // Apps Script Iframe pre-load confirmation
+        frame.onload = () => {
+            isReady = true;
+            txt.innerText = "TAP TO START ENGINE";
+            txt.style.color = "#ff3333";
+            txt.style.opacity = "1";
+            txt.style.textShadow = "0 0 10px rgba(255,51,51,0.8)";
+        };
+
+        function launchPOS() {
+            if (!isReady) return; // Disallow premature launch
+
+            // Audio Cue
+            audio.play(); 
+            
+            // Nitro Flash Ignition
+            flash.style.animation = "strike-anim 0.35s forwards";
+            
+            // Warp Zoom Transition
+            logo.style.transform = "scale(20) translateZ(500px)";
+            logo.style.filter = "brightness(10) blur(30px)";
+            
+            // Hot-swap interface during the peak luminance frame
+            setTimeout(() => {
+                loader.style.opacity = "0";
+                wrapper.classList.add('active');
+                setTimeout(() => { loader.style.display = 'none'; }, 200);
+            }, 120);
+        }
+    </script>
+</body>
+</html>
