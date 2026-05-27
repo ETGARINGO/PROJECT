@@ -2,112 +2,153 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Motorshop POS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Motorshop POS - Premium Edition</title>
     
     <link rel="icon" type="image/png" href="MOTORL.png">
     <link rel="apple-touch-icon" href="MOTORL.png">
 
     <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body, html {
             margin: 0; padding: 0; height: 100%; width: 100%;
-            overflow: hidden; background-color: #050505;
+            overflow: hidden; background-color: #030303;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             perspective: 2000px;
         }
 
-        /* Subtle Cyber Scanline Overlay for Tactical Finish */
-        body::after {
+        /* Tactical Cyber Grid Mesh Background */
+        body::before {
             content: " ";
             display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 255, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 9999; background-size: 100% 4px, 6px 100%;
-            pointer-events: none;
+            background: linear-gradient(135deg, rgba(15, 10, 10, 0.95) 0%, rgba(5, 5, 5, 0.98) 100%);
+            z-index: 1; pointer-events: none;
         }
 
-        /* High-Voltage Flash */
+        /* High-Voltage Flash Grid */
         #flash {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #fff; opacity: 0; z-index: 1000; pointer-events: none;
         }
 
-        /* Splash Screen */
+        /* Splash Screen Module */
         #loader {
             position: fixed; z-index: 999; top: 0; left: 0; 
-            width: 100%; height: 100%; background: #000;
+            width: 100%; height: 100%; 
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
-            cursor: pointer;
-            transition: opacity 0.2s ease;
+            cursor: pointer; padding: 20px;
+            transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Logo with Nitro Glow Pulse */
+        /* Glassmorphism Pod Case Container - Fully Responsive Scale */
+        .glass-pod {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 51, 51, 0.15);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: clamp(30px, 6vw, 60px) clamp(20px, 5vw, 50px);
+            border-radius: 24px;
+            display: flex; flex-direction: column; align-items: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 40px rgba(255, 51, 51, 0.05);
+            width: 100%;
+            max-width: min(480px, 90vw);
+            max-height: 90vh;
+            transform: scale(0.95);
+            animation: boot-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Premium Logo Pulsing - Vector Scaling logic */
         #logo {
-            width: 80%; max-width: 450px;
-            filter: drop-shadow(0 0 20px rgba(255, 51, 51, 0.35));
+            width: 100%;
+            max-width: clamp(180px, 45vw, 320px);
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 0 25px rgba(255, 51, 51, 0.3));
             will-change: transform, filter;
             transition: transform 0.28s cubic-bezier(0.4, 0, 1, 1), filter 0.2s;
-            animation: breathe 2s infinite ease-in-out;
+            animation: engine-breathe 2.5s infinite ease-in-out;
         }
 
-        /* READY Status Glow - Motorsport Styling */
+        /* Motorsports Clean Tech Status Message */
         .status {
-            color: #222; margin-top: 40px; letter-spacing: 6px;
-            font-size: 11px; font-weight: 900; font-style: italic; text-transform: uppercase;
-            transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+            color: rgba(255, 255, 255, 0.15); 
+            margin-top: clamp(25px, 5vh, 45px); 
+            letter-spacing: clamp(4px, 1vw, 7px);
+            font-size: clamp(10px, 2.5vw, 11px); 
+            font-weight: 900; font-style: italic; text-transform: uppercase;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 100%;
+            white-space: nowrap;
         }
 
-        /* POS Container Entrance */
+        /* Secure POS Viewport Interface Frame Container */
         .pos-container {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0; transform: scale(1.08) translateZ(0); visibility: hidden;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5;
+            opacity: 0; transform: scale(1.05) translateZ(0); visibility: hidden;
             will-change: transform, opacity;
+            overflow: hidden;
         }
 
         .pos-container.active {
             opacity: 1; visibility: visible; transform: scale(1) translateZ(0);
-            transition: opacity 0.15s ease-out, transform 0.25s cubic-bezier(0.1, 0.9, 0.2, 1);
-            animation: impact-shake 0.3s ease-out;
+            transition: opacity 0.2s ease-out, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: system-impact-shake 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        iframe { width: 100%; height: 100%; border: none; background-color: #000; }
-
-        /* Keyframes */
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 12px rgba(255, 51, 51, 0.25)); }
-            50% { transform: scale(1.03); filter: drop-shadow(0 0 32px rgba(255, 51, 51, 0.65)); }
+        iframe { 
+            width: 100%; height: 100%; border: none; background-color: #000;
+            display: block; position: absolute; top: 0; left: 0;
         }
 
-        @keyframes strike-anim {
+        /* Keyframe Operations */
+        @keyframes boot-up {
+            to { transform: scale(1); }
+        }
+
+        @keyframes engine-breathe {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 51, 51, 0.25)); }
+            50% { transform: scale(1.025); filter: drop-shadow(0 0 35px rgba(255, 51, 51, 0.6)); }
+        }
+
+        @keyframes nitro-strike {
             0% { opacity: 0; }
-            10% { opacity: 1; background: #fff; }
-            20% { opacity: 0.75; background: #ff2222; } /* Nitro Ignition Tint */
-            30% { opacity: 1; background: #fff; }
+            12% { opacity: 1; background: #fff; }
+            25% { opacity: 0.8; background: #ff2222; }
+            40% { opacity: 1; background: #fff; }
             100% { opacity: 0; }
         }
 
-        @keyframes impact-shake {
-            0% { transform: translate(0,0) scale(1.15); filter: brightness(4); }
-            10% { transform: translate(-8px, 6px); }
-            30% { transform: translate(8px, -6px); }
-            50% { transform: translate(-4px, 3px); }
-            100% { transform: translate(0,0) scale(1); filter: brightness(1); }
+        @keyframes system-impact-shake {
+            0% { transform: translate(0,0) scale(1.08); filter: brightness(3) contrast(1.2); }
+            15% { transform: translate(-4px, 3px); }
+            35% { transform: translate(4px, -3px); }
+            55% { transform: translate(-2px, 1px); }
+            100% { transform: translate(0,0) scale(1); filter: brightness(1) contrast(1); }
         }
     </style>
 </head>
 <body>
 
+    <!-- Audio Propulsion Trigger -->
     <audio id="thunderSfx" src="https://www.soundjay.com/nature/sounds/thunder-crack-1.mp3" preload="auto"></audio>
     
     <div id="flash"></div>
 
-    <!-- Splash Loader Section -->
+    <!-- Active Loader Pod Gateway Link -->
     <div id="loader" onclick="launchPOS()">
-        <img src="MOTORL.png" id="logo" alt="Motorshop Logo">
-        <div class="status" id="txt">IGNITING SYSTEM...</div>
+        <div class="glass-pod">
+            <img src="MOTORL.png" id="logo" alt="Motorshop Logo">
+            <div class="status" id="txt">IGNITING SYSTEM...</div>
+        </div>
     </div>
 
-    <!-- Live POS System Frame -->
+    <!-- Live POS Frame Gateway System -->
     <div id="posWrapper" class="pos-container">
         <iframe 
             id="posFrame"
@@ -127,34 +168,34 @@
 
         let isReady = false;
 
-        // Apps Script Iframe pre-load confirmation
+        // Verify Backend Connection inside Iframe Layout Structure
         frame.onload = () => {
             isReady = true;
             txt.innerText = "TAP TO START ENGINE";
             txt.style.color = "#ff3333";
             txt.style.opacity = "1";
-            txt.style.textShadow = "0 0 12px rgba(255,51,51,0.85)";
+            txt.style.textShadow = "0 0 15px rgba(255,51,51,0.9)";
         };
 
         function launchPOS() {
-            if (!isReady) return; // Disallow premature launch
+            if (!isReady) return; 
 
-            // Audio Cue
+            // Execute Audio Wave
             audio.play(); 
             
-            // Nitro Flash Ignition
-            flash.style.animation = "strike-anim 0.35s forwards";
+            // Core Flash Initialization
+            flash.style.animation = "nitro-strike 0.38s forwards";
             
-            // Warp Zoom Transition
-            logo.style.transform = "scale(22) translateZ(600px)";
-            logo.style.filter = "brightness(12) blur(25px)";
+            // Zoom Matrix Transition Transform Layout
+            logo.style.transform = "scale(25) translateZ(800px)";
+            logo.style.filter = "brightness(15) blur(20px)";
             
-            // Hot-swap interface during the peak luminance frame
+            // Swap viewports instantly at maximum exposure peak frame
             setTimeout(() => {
                 loader.style.opacity = "0";
                 wrapper.classList.add('active');
-                setTimeout(() => { loader.style.display = 'none'; }, 200);
-            }, 120);
+                setTimeout(() => { loader.style.display = 'none'; }, 250);
+            }, 140);
         }
     </script>
 </body>
