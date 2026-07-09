@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Portal</title>
+    <link rel="icon" type="image/png" href="pos.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background-color: #0f172a; font-family: system-ui, sans-serif; }
+
+        /* Fast 0.6s Splash Screen */
+        #splash {
+            position: fixed;
+            inset: 0;
+            background: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            pointer-events: none;
+            animation: fastOut 0.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation-delay: 0.4s;
+        }
+        #splash img {
+            width: 100px;
+            height: auto;
+            animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* Main App Panel */
+        .app-view {
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: slideUp 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation-delay: 0.45s;
+        }
+        iframe { width: 100%; height: 100%; border: none; display: block; }
+
+        @keyframes popIn { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
+        @keyframes fastOut { 100% { opacity: 0; visibility: hidden; } }
+        @keyframes slideUp { 100% { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <!-- Fast Branded Intro Animation -->
+    <div id="splash">
+        <img src="pos.png" alt="Logo">
+    </div>
+
+    <!-- Main Content App -->
+    <div class="app-view">
+        <iframe 
+            src="https://script.google.com/macros/s/AKfycbwT9HJIlCDUyyQAemcsITTzDew5VcpYAk9Q7zQlfBtQbbWnC-qwU011xZJ3S9EA0xXv/exec" 
+            allow="geolocation; microphone; camera; midi; encrypted-media; clipboard-write; payment"
+            loading="eager">
+        </iframe>
+    </div>
+
+</body>
+</html>
