@@ -2,201 +2,266 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Motorshop POS - Premium Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="icon" type="image/png" href="MOTORL.png">
-    <link rel="apple-touch-icon" href="MOTORL.png">
+    <!-- Precise Title Update -->
+    <title>POS | Firebase Records Manager</title>
+    
+    <!-- Complete Link Icon (Favicon) Suite for Cross-Browser Compatibility -->
+    <link rel="icon" type="image/png" href="pos.png">
+    <link rel="shortcut icon" type="image/x-icon" href="pos.png">
+    <link rel="apple-touch-icon" href="pos.png">
 
     <style>
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+        :root {
+            --bg-color: #080a10; /* Rich Obsidian Black */
+            --accent-gold: #d4af37; /* Burnished Champagne Gold */
+            --gold-glow: rgba(212, 175, 55, 0.12);
+            --text-main: #f5f6f9; /* Off-White Silk */
+            --text-muted: #8a909e; /* Premium Platinum Muted */
         }
 
-        body, html {
-            margin: 0; padding: 0; height: 100%; width: 100%;
-            overflow: hidden; background-color: #030303;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            perspective: 2000px;
-        }
-
-        /* Tactical Cyber Grid Mesh Background */
-        body::before {
-            content: " ";
-            display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(135deg, rgba(15, 10, 10, 0.95) 0%, rgba(5, 5, 5, 0.98) 100%);
-            z-index: 1; pointer-events: none;
-        }
-
-        /* High-Voltage Flash Grid */
-        #flash {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #fff; opacity: 0; z-index: 1000; pointer-events: none;
-        }
-
-        /* Splash Screen Module */
-        #loader {
-            position: fixed; z-index: 999; top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            cursor: pointer; padding: 20px;
-            transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Glassmorphism Pod Case Container - Fully Responsive Scale */
-        .glass-pod {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 51, 51, 0.15);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            padding: clamp(30px, 6vw, 60px) clamp(20px, 5vw, 50px);
-            border-radius: 24px;
-            display: flex; flex-direction: column; align-items: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 40px rgba(255, 51, 51, 0.05);
+        html, body {
+            margin: 0;
+            padding: 0;
             width: 100%;
-            max-width: min(480px, 90vw);
-            max-height: 90vh;
-            transform: scale(0.95);
-            animation: boot-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        /* Premium Logo Pulsing - Vector Scaling logic */
-        #logo {
-            width: 100%;
-            max-width: clamp(180px, 45vw, 320px);
-            height: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 0 25px rgba(255, 51, 51, 0.3));
-            will-change: transform, filter;
-            transition: transform 0.28s cubic-bezier(0.4, 0, 1, 1), filter 0.2s;
-            animation: engine-breathe 2.5s infinite ease-in-out;
-        }
-
-        /* Motorsports Clean Tech Status Message */
-        .status {
-            color: rgba(255, 255, 255, 0.15); 
-            margin-top: clamp(25px, 5vh, 45px); 
-            letter-spacing: clamp(4px, 1vw, 7px);
-            font-size: clamp(10px, 2.5vw, 11px); 
-            font-weight: 900; font-style: italic; text-transform: uppercase;
-            text-align: center;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            width: 100%;
-            white-space: nowrap;
-        }
-
-        /* Secure POS Viewport Interface Frame Container */
-        .pos-container {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5;
-            opacity: 0; transform: scale(1.05) translateZ(0); visibility: hidden;
-            will-change: transform, opacity;
+            height: 100%;
             overflow: hidden;
+            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .pos-container.active {
-            opacity: 1; visibility: visible; transform: scale(1) translateZ(0);
-            transition: opacity 0.2s ease-out, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            animation: system-impact-shake 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        /* Luxury Ambient Ambient Glow Framework */
+        .bg-glow-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .bg-glow-1 {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--gold-glow) 0%, rgba(0,0,0,0) 70%);
+            top: -200px;
+            right: -100px;
+            animation: floatGlow 14s ease-in-out infinite alternate;
+        }
+        .bg-glow-2 {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 60%);
+            bottom: -150px;
+            left: -100px;
+            animation: floatGlow 18s ease-in-out infinite alternate-reverse;
         }
 
-        iframe { 
-            width: 100%; height: 100%; border: none; background-color: #000;
-            display: block; position: absolute; top: 0; left: 0;
+        /* Screen Overlay / Entrance Loader */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1), visibility 1.2s;
         }
 
-        /* Keyframe Operations */
-        @keyframes boot-up {
-            to { transform: scale(1); }
+        /* Premium Minimalist Luxury Panel */
+        .luxury-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 60px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 0.03) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            border-radius: 16px;
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 2;
+            opacity: 0;
+            transform: scale(0.96);
+            animation: cardEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        @keyframes engine-breathe {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 51, 51, 0.25)); }
-            50% { transform: scale(1.025); filter: drop-shadow(0 0 35px rgba(255, 51, 51, 0.6)); }
+        /* Premium Logo Presentation */
+        .logo-wrapper {
+            position: relative;
+            margin-bottom: 32px;
+            transform: translateY(10px);
+            opacity: 0;
+            animation: fadeInUp 1s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        @keyframes nitro-strike {
-            0% { opacity: 0; }
-            12% { opacity: 1; background: #fff; }
-            25% { opacity: 0.8; background: #ff2222; }
-            40% { opacity: 1; background: #fff; }
-            100% { opacity: 0; }
+        .logo-wrapper img {
+            width: 90px;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.2));
         }
 
-        @keyframes system-impact-shake {
-            0% { transform: translate(0,0) scale(1.08); filter: brightness(3) contrast(1.2); }
-            15% { transform: translate(-4px, 3px); }
-            35% { transform: translate(4px, -3px); }
-            55% { transform: translate(-2px, 1px); }
-            100% { transform: translate(0,0) scale(1); filter: brightness(1) contrast(1); }
+        /* High-End Typography Styling */
+        .entrance-text {
+            color: var(--text-main);
+            font-family: "Times New Roman", Times, Baskerville, Georgia, serif; /* Elegant Serif Touch */
+            font-size: 28px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: fadeInUp 1s 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            text-align: center;
+        }
+
+        .subtitle-text {
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 48px;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInUp 1s 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Ultra-Thin Minimalist Loading Bar */
+        .progress-container {
+            width: 180px;
+            height: 2px; /* Thinner line for a more boutique look */
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 0.8s 0.7s forwards;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(212,175,55,0.2), var(--accent-gold), rgba(212,175,55,0.2));
+            transform: translateX(-100%);
+            animation: loaderProgress 3s cubic-bezier(0.65, 0.05, 0.36, 1) infinite;
+            box-shadow: 0 0 8px var(--accent-gold);
+        }
+
+        /* Main Embedded Application Viewport */
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            opacity: 0;
+            transform: scale(1.01);
+            filter: grayscale(30%) brightness(0.8);
+            transition: opacity 1.5s cubic-bezier(0.25, 1, 0.5, 1), 
+                        transform 1.5s cubic-bezier(0.25, 1, 0.5, 1),
+                        filter 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Smooth Cinematic Reveal State */
+        iframe.loaded {
+            opacity: 1;
+            transform: scale(1);
+            filter: grayscale(0%) brightness(1);
+        }
+
+        /* Master Hide Selector */
+        .fade-out {
+            opacity: 0 !important;
+            visibility: hidden !important;
+        }
+
+        /* Specialized Animation Engines */
+        @keyframes cardEntrance {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes loaderProgress {
+            0% { transform: translateX(-100%); }
+            40% { transform: translateX(-10%); }
+            60% { transform: translateX(10%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(60px, -40px) scale(1.15); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Audio Propulsion Trigger -->
-    <audio id="thunderSfx" src="https://www.soundjay.com/nature/sounds/thunder-crack-1.mp3" preload="auto"></audio>
-    
-    <div id="flash"></div>
+    <!-- Luxury Ambient Background Elements -->
+    <div class="bg-glow-container">
+        <div class="bg-glow-1"></div>
+        <div class="bg-glow-2"></div>
+    </div>
 
-    <!-- Active Loader Pod Gateway Link -->
-    <div id="loader" onclick="launchPOS()">
-        <div class="glass-pod">
-            <img src="MOTORL.png" id="logo" alt="Motorshop Logo">
-            <div class="status" id="txt">IGNITING SYSTEM...</div>
+    <!-- Entrance Loader Overlay -->
+    <div id="loader">
+        <!-- Glassmorphism Presentation Shield -->
+        <div class="luxury-card">
+            <div class="logo-wrapper">
+                <img src="pos.png" alt="System Logo">
+            </div>
+            
+            <div class="entrance-text">POS | Firebase Records Manager</div>
+            <div class="subtitle-text">Secure Cloud Database Infrastructure</div>
+            
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+            </div>
         </div>
     </div>
 
-    <!-- Live POS Frame Gateway System -->
-    <div id="posWrapper" class="pos-container">
-        <iframe 
-            id="posFrame"
-            src="https://script.google.com/macros/s/AKfycbyXu-_d4lV2Q-ltPKNI5FZ9pDuUBbU4QQuh9Jc-qGva67KspzOEHCi33ABY5fhuywbh/exec?page=casher" 
-            allow="camera; geolocation; microphone">
-        </iframe>
-    </div>
+    <!-- Application Embedded Frame -->
+    <iframe 
+      id="app-frame"
+      src="https://script.google.com/macros/s/AKfycbzcCV_G0eQLOgFbYIJSKkCp58KiroKzyXMkCr3g0KugLzxEwy9E7TpGbRqN0McOSuI/exec" 
+      allow="geolocation; microphone; camera; clipboard-write">
+    </iframe>
 
     <script>
-        const audio = document.getElementById('thunderSfx');
-        const logo = document.getElementById('logo');
-        const flash = document.getElementById('flash');
+        const iframe = document.getElementById('app-frame');
         const loader = document.getElementById('loader');
-        const wrapper = document.getElementById('posWrapper');
-        const frame = document.getElementById('posFrame');
-        const txt = document.getElementById('txt');
 
-        let isReady = false;
-
-        // Verify Backend Connection inside Iframe Layout Structure
-        frame.onload = () => {
-            isReady = true;
-            txt.innerText = "TAP TO START ENGINE";
-            txt.style.color = "#ff3333";
-            txt.style.opacity = "1";
-            txt.style.textShadow = "0 0 15px rgba(255,51,51,0.9)";
-        };
-
-        function launchPOS() {
-            if (!isReady) return; 
-
-            // Execute Audio Wave
-            audio.play(); 
-            
-            // Core Flash Initialization
-            flash.style.animation = "nitro-strike 0.38s forwards";
-            
-            // Zoom Matrix Transition Transform Layout
-            logo.style.transform = "scale(25) translateZ(800px)";
-            logo.style.filter = "brightness(15) blur(20px)";
-            
-            // Swap viewports instantly at maximum exposure peak frame
-            setTimeout(() => {
-                loader.style.opacity = "0";
-                wrapper.classList.add('active');
-                setTimeout(() => { loader.style.display = 'none'; }, 250);
-            }, 140);
-        }
+        // Monitor System Initialization Completion
+        iframe.addEventListener('load', () => {
+            // Initiate deep cinema application fade-in
+            iframe.classList.add('loaded');
+            // Gracefully dissipate the presentation card
+            loader.classList.add('fade-out');
+        });
     </script>
+
 </body>
 </html>
